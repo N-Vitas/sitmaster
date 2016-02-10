@@ -5,7 +5,7 @@ $params = array_merge(
     require(__DIR__ . '/params.php'),
     require(__DIR__ . '/params-local.php')
 );
-
+$version = 'v1';
 return [
     'id' => 'app-api',
     'basePath' => dirname(__DIR__),
@@ -29,18 +29,24 @@ return [
     'components' => [
        'urlManager' => [
             'enablePrettyUrl' => true,
-            'enableStrictParsing' => true,
+            // 'enableStrictParsing' => true,
             'showScriptName' => false,
-            'rules' => [
-                'v1/login' => 'v1/login',
-                'v1/login/key' => 'v1/login/key',
-                'v1/login/token' => 'v1/login/token',
-                'v1/login/logout' => 'v1/login/logout',
-                'v1/login/create' => 'v1/login/create',
-                'v1/test' => 'v1/test',
-                'v1/test/test' => 'v1/test/test',
-                'v1/test/create' => 'v1/test/create',
-                //['class' => 'yii\rest\UrlRule', 'controller' => 'v1/Test'],
+            'rules' => [            
+                ['pattern' => '','route' => 'v1/test'],
+                ['pattern' => 'v1/<controller>/<action>/<id:\d+>','route' => 'v1/<controller>/<action>'],
+                ['class' => 'yii\rest\UrlRule', 'controller' => 'v1/post'], 
+                ['class' => 'yii\rest\UrlRule', 'controller' => 'v1/followers'],  
+                ['class' => 'yii\rest\UrlRule', 'controller' => 'v1/user'],    
+                ['class' => 'yii\rest\UrlRule', 'controller' => 'v1/car'],   
+                ['class' => 'yii\rest\UrlRule', 'controller' => 'v1/colors'],    
+                ['class' => 'yii\rest\UrlRule', 'controller' => 'v1/searchcar'], 
+                ['class' => 'yii\rest\UrlRule', 'controller' => 'v1/profile'], 
+                ['class' => 'yii\rest\UrlRule', 'controller' => 'v1/countries'], 
+                //['class' => 'yii\rest\UrlRule', 'controller' => 'v1/regions'], 
+                //['class' => 'yii\rest\UrlRule', 'controller' => 'v1/cities'], 
+                //['class' => 'yii\rest\UrlRule', 'controller' => 'v1/comment'],Regions
+                //'v1/comment/update/<id:\d+>' => 'v1/comment/update/<id:\d+>',             
+                //['class' => 'yii\rest\UrlRule', 'controller' => 'v1/Test'],*/
             ],
        ],
         'request' => [
@@ -58,8 +64,7 @@ return [
             'identityClass' => 'common\models\User',
             'enableSession' => false,
             'loginUrl' => null,
-        ],
-
+        ],              
     ],
     'params' => $params,
 ];
