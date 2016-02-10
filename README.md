@@ -2,7 +2,7 @@
 Yii 2 Advanced Project Template
 ===============================
 
-Реализация создания сайта [sitmaster.kz](http://sitmaster.kz) для творческой группы "Совершенство информационных технологий"
+Реализация создания сервиса helpdesc [sitmaster.kz](http://sitmaster.kz) творческой группы "Совершенство информационных технологий"
 
 Для реализации проэкта используется framework Yii 2
 
@@ -44,4 +44,21 @@ tests
 ```
 =======
 # sitmaster
-Репозоторий тестового проэкта
+Репозоторий проэкта сервиса техподдержки
+
+## Установка
+
+### Через git clone
+
+* Склонируйте репозиторий и установите все зависимости Composer
+
+```shell
+git clone git@github.com:N-Vitas/sitmaster.git newproject
+cd newproject
+composer install
+```
+
+## Инициализируйте окружение
+```
+./init
+```
