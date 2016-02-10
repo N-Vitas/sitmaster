@@ -98,42 +98,12 @@ class SetupController extends \yii\console\Controller {
       exec("git commit -mFirst_commit");
       echo $this->ansiFormat("Done! \n", Console::FG_GREEN);
 
-      // Sandstorm user on gitlab token is: t5KRbywsEQAqio1buWdG
-      if ($this->confirm("Create '{$project['name']}' repository on gitlab?")) {
-        echo $this->ansiFormat("\nCreate repository on gitlab...  \n", Console::FG_BLUE);
-        $client = new \Gitlab\Client('http://gitlab.vesna.kz/api/v3/'); // change here
-        $client->authenticate('t5KRbywsEQAqio1buWdG', \Gitlab\Client::AUTH_URL_TOKEN); // change here
-
-        try {
-          $gitlabProject = \Gitlab\Model\Project::create($client, $project['name'], array(
-            'namespace_id' => 5,
-            'description' => 'Repository for '.$project['name'],
-            'issues_enabled' => true
-          ));
-
-          echo $this->ansiFormat("Done! \n", Console::FG_GREEN);
-          echo $this->ansiFormat("\nPushing to gitlab...  \n", Console::FG_BLUE);
-          exec("git remote add origin git@gitlab.vesna.kz:vesna/{$project['name']}.git");
-          exec("git push -u origin master");
-          echo $this->ansiFormat("Done! \n", Console::FG_GREEN);
-
-
-        } catch (\Gitlab\Exception\RuntimeException $e) {
-          Console::output($this->ansiFormat('Невозможно создать репозиторий на Giltab. Возможно он уже существует, проверьте!', Console::FG_RED));
-          // exit(1);
-        }
-      }else{
-        Console::output($this->ansiFormat(
-"// Push on gitlab manually
-git remote add origin git@gitlab.vesna.kz:vesna/{$project['name']}.git
-git push -u origin master
-",
-Console::BG_YELLOW));
-      }
-
-      if ($this->confirm("Create '{$project['name']}'.timesafe.kz site on test server?")) {
-        $this->actionDeploy($project, $mysql);
-      }
+      Console::output($this->ansiFormat(
+        "// Push on gitlab manually
+        git remote add origin git@github.com:N-Vitas/sitmaster.git
+        git push -u origin master
+        ",
+        Console::BG_YELLOW));
 
       Console::output($this->ansiFormat("Opening http://b.{$project['url']}... ", Console::BG_YELLOW));
       exec("x-www-browser http://b.{$project['url']}");
@@ -142,50 +112,6 @@ Console::BG_YELLOW));
     } else {
       echo $this->ansiFormat("Abort operation \n", Console::FG_RED);
     }
-  }
-
-  public function actionDeploy($project=[],$mysql=[]){
-    if(!count($project)){
-      $config = $this->config();
-      $project = $config['project'];
-      $mysql = $config['mysql'];
-    }
-
-    if(!$project['name']){
-        $project['name']='deploy';
-    }
-    exec ('ssh strannik@timesafe.kz \'
-      mkdir /var/www/'.$project['name'].'.timesafe;
-      cd /var/www/'.$project['name'].'.timesafe;
-      git init;
-      cp /var/www/useful/git/post-receive ./.git/hooks/;
-      chmod +x .git/hooks/post-receive;
-      git config receive.denyCurrentBranch ignore;
-    \'');
-    exec('git remote add test strannik@timesafe.kz:/var/www/'.$project['name'].'.timesafe');
-    exec('git push test master');
-
-
-    // exec ('ssh strannik@timesafe.kz \'
-    //   cd /var/www/'.$project['name'].'.timesafe;
-    //   \'');
-    $removeCommand = 'ssh strannik@timesafe.kz \'
-      cd /var/www/'.$project['name'].'.timesafe;
-      composer install --no-progress;
-      composer update --no-progress;
-      ./init --env=Development --overwrite=1;
-      echo "CREATE DATABASE '.$mysql['dbname'].' DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;" | mysql -uroot -psuZtDUdM;
-      ./yii setup/db localhost '.$mysql['dbname'].' root suZtDUdM;
-      '.implode('; ',$this->migrations).'
-      ./yii migrate/up;
-      ln -s /var/www/'.$project['name'].'.timesafe/frontend/web /var/www/'.$project['name'].'.timesafe.kz;
-      ln -s /var/www/'.$project['name'].'.timesafe/backend/web /var/www/b.'.$project['name'].'.timesafe.kz;\'';
-    exec ($removeCommand);
-
-    exec("x-www-browser http://b.{$project['name']}.timesafe.kz");
-
-    // TODO сделать понятнее и попроще %(
-
   }
 
   public function actionDb($host='localhost',$dbname='test',$user='',$pwd=''){
