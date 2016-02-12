@@ -15,15 +15,33 @@ use yii\web\AssetBundle;
  */
 class AppAsset extends AssetBundle
 {
-    public $basePath = '@webroot';
+    public $sourcePath = '@themes/material';    
     public $baseUrl = '@web';
     public $css = [
-        'css/site.css',
+        '//fonts.googleapis.com/css?family=Roboto:300,400,500,700',
+        '//fonts.googleapis.com/icon?family=Material+Icons',
+        '//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css',
+        'css/bootstrap-material-design.min.css',
+        'css/ripples.min.css',
+        'css/style.css',
     ];
     public $js = [
+        'js/material.min.js',
+        'js/ripples.min.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',
         'yii\bootstrap\BootstrapAsset',
     ];
+    // public $basePath = '@webroot';
+    // public $baseUrl = '@web';
+    // public $css = [
+    //     'css/site.css',
+    // ];
+    // public $js = [
+    // ];
+    // public $depends = [
+    //     'yii\web\YiiAsset',
+    //     'yii\bootstrap\BootstrapAsset',
+    // ];
 }

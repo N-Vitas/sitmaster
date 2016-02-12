@@ -13,7 +13,7 @@ $this->beginContent('@frontend/views/layouts/structure.php') ?>
                 'brandLabel' => 'My Company',
                 'brandUrl' => Yii::$app->homeUrl,
                 'options' => [
-                    'class' => 'navbar-inverse navbar-fixed-top',
+                    'class' => 'navbar-inverse navbar',///*-fixed-top*/
                 ],
             ]);
             $menuItems = [
@@ -38,7 +38,6 @@ $this->beginContent('@frontend/views/layouts/structure.php') ?>
             ]);
             NavBar::end();
         ?>
-
         <div class="container">
         <?= Breadcrumbs::widget([
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
@@ -46,5 +45,5 @@ $this->beginContent('@frontend/views/layouts/structure.php') ?>
         <?= Alert::widget() ?>
         <?= $content ?>
         </div>
-    </div>
+</div>
 <?php $this->endContent(); ?>
