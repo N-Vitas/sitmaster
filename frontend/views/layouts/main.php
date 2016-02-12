@@ -13,7 +13,7 @@ $this->beginContent('@frontend/views/layouts/structure.php') ?>
                 'brandLabel' => 'My Company',
                 'brandUrl' => Yii::$app->homeUrl,
                 'options' => [
-                    'class' => 'navbar-inverse navbar',///*-fixed-top*/
+                    'class' => 'navbar navbar-inverse',///*-fixed-top*/
                 ],
             ]);
             $menuItems = [
