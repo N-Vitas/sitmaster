@@ -76,7 +76,8 @@ class SetupController extends \yii\console\Controller {
         // If default name is free, it will be for frontend
         exec("ln -s $path/frontend/web ../{$project['url']}");
       }
-      exec("ln -s $path/backend/web ../b.{$project['url']}");
+      exec("ln -s $path/backend/web ../b.{$project['url']}");      
+      exec("ln -s $path/api/web ../api.{$project['url']}");
       echo $this->ansiFormat(" Done! \n", Console::FG_GREEN);
 
       // Set DB params
