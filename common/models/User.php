@@ -2,187 +2,195 @@
 namespace common\models;
 
 use Yii;
-use yii\base\NotSupportedException;
-use yii\behaviors\TimestampBehavior;
-use yii\db\ActiveRecord;
-use yii\web\IdentityInterface;
+use dektrium\user\models\User as BaseUser;
+use \common\models\Post;
+use \common\models\Profile;
+use \common\models\Token;
 
-/**
- * User model
- *
- * @property integer $id
- * @property string $username
- * @property string $password_hash
- * @property string $password_reset_token
- * @property string $email
- * @property string $auth_key
- * @property integer $status
- * @property integer $created_at
- * @property integer $updated_at
- * @property string $password write-only password
- */
-class User extends ActiveRecord implements IdentityInterface
+class User extends BaseUser
 {
-    const STATUS_DELETED = 0;
-    const STATUS_ACTIVE = 10;
 
-    /**
-     * @inheritdoc
-     */
-    public static function tableName()
+    public static function findIdentity($id)
     {
-        return '{{%user}}';
+        return static::findOne(['id' => $id]);
     }
-
-    /**
-     * @inheritdoc
-     */
-    public function behaviors()
+    public function scenarios()
     {
         return [
-            TimestampBehavior::className(),
-        ];
+                'default'  => ['email'],
+                'register' => ['username', 'email', 'password'],
+                'connect'  => ['username', 'email'],
+                'create'   => ['username', 'email', 'password'],
+                'update'   => ['username', 'email', 'password'],
+                'settings' => ['username', 'email', 'password']
+            ];
     }
 
-    /**
-     * @inheritdoc
-     */
     public function rules()
     {
         return [
-            ['status', 'default', 'value' => self::STATUS_ACTIVE],
-            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
-        ];
-    }
+                ['username', 'required', 'on' => ['register', 'connect', 'create', 'update']],
+                ['username', 'match', 'pattern' => '/^[a-zA-Z]\w+$/'],
+                ['username', 'string', 'min' => 3, 'max' => 25],
+                ['username', 'unique'],
+                ['username', 'trim'],
 
-    /**
-     * @inheritdoc
-     */
-    public static function findIdentity($id)
+                ['apikey','string','max' => 32],
+
+                ['email', 'required', 'on' => ['register', 'connect', 'create', 'update']],
+                ['email', 'email'],
+                ['email', 'string', 'max' => 255],
+                ['email', 'unique'],
+                ['email', 'trim'],
+
+                ['password', 'required', 'on' => ['register']],
+                ['password', 'string', 'min' => 6, 'on' => ['register', 'create']],
+            ];
+    }
+    public function attributes()
     {
-        return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
+        return ['id', 'username', 'email','password_hash','auth_key','confirmed_at','created_at','updated_at','flags','user_info','registration_ip','password_reset_token'];
     }
-
-    /**
-     * @inheritdoc
-     */
-    public static function findIdentityByAccessToken($token, $type = null)
+    public function getProfile()
     {
-        throw new NotSupportedException('"findIdentityByAccessToken" is not implemented.');
+        return $this->hasOne(Profile::className(),['user_id'=>'id']);
     }
-
-    /**
-     * Finds user by username
-     *
-     * @param string $username
-     * @return static|null
-     */
     public static function findByUsername($username)
     {
-        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
+        return static::findOne(['username' => $username]);
     }
 
-    /**
-     * Finds user by password reset token
-     *
-     * @param string $token password reset token
-     * @return static|null
-     */
+    public static function findByEmail($email)
+    {
+        return static::findOne(['email' => $email]);
+    }
     public static function findByPasswordResetToken($token)
     {
-        if (!static::isPasswordResetTokenValid($token)) {
-            return null;
-        }
-
-        return static::findOne([
-            'password_reset_token' => $token,
-            'status' => self::STATUS_ACTIVE,
-        ]);
+        return static::findOne(['password_reset_token' => $token]);
     }
-
-    /**
-     * Finds out if password reset token is valid
-     *
-     * @param string $token password reset token
-     * @return boolean
-     */
-    public static function isPasswordResetTokenValid($token)
-    {
-        if (empty($token)) {
-            return false;
-        }
-        $expire = Yii::$app->params['user.passwordResetTokenExpire'];
-        $parts = explode('_', $token);
-        $timestamp = (int) end($parts);
-        return $timestamp + $expire >= time();
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function getId()
     {
         return $this->getPrimaryKey();
     }
 
-    /**
-     * @inheritdoc
-     */
+    public static function getUsername($id)
+    {
+        $username = static::findOne(['id' => $id]);
+        return $username->username;
+    }
+
     public function getAuthKey()
     {
         return $this->auth_key;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function validateAuthKey($authKey)
     {
         return $this->getAuthKey() === $authKey;
     }
-
-    /**
-     * Validates password
-     *
-     * @param string $password password to validate
-     * @return boolean if password provided is valid for current user
-     */
     public function validatePassword($password)
     {
         return Yii::$app->security->validatePassword($password, $this->password_hash);
     }
-
-    /**
-     * Generates password hash from password and sets it to the model
-     *
-     * @param string $password
-     */
     public function setPassword($password)
     {
         $this->password_hash = Yii::$app->security->generatePasswordHash($password);
     }
-
-    /**
-     * Generates "remember me" authentication key
-     */
     public function generateAuthKey()
     {
         $this->auth_key = Yii::$app->security->generateRandomString();
     }
-
-    /**
-     * Generates new password reset token
-     */
+    public function generateApiKey()
+    {
+        $this->apikey = Yii::$app->security->generateRandomString();
+    }
     public function generatePasswordResetToken()
     {
-        $this->password_reset_token = Yii::$app->security->generateRandomString() . '_' . time();
+        $this->password_reset_token = Yii::$app->security->generateRandomString().'_'.time();
+    }
+    public function removePasswordResetToken(){
+        $this->password_reset_token = 0;
+    }
+    //тест связи пользователя с постом.
+    public function getPosts()
+    {
+        return $this->hasMany(Post::className(), ['parent_user_id' => 'id']);   
     }
 
-    /**
-     * Removes password reset token
-     */
-    public function removePasswordResetToken()
+
+    public static function getToken($token, $type = null)
     {
-        $this->password_reset_token = null;
+        return Token::findOne(['code'=>$token]);
+    }
+
+    public static function findIdentityByAccessToken($token, $type = null)
+    {
+        $tokenModel = self::getToken($token,$type);
+        if($tokenModel && !$tokenModel->getIsExpired()){
+            return self::findOne(['id'=>$tokenModel->user_id]);
+        }
+
+        return null;
+    }
+
+    public function generateToken($type=false)
+    {
+        if (!$type) {
+            $type = Token::TYPE_APPLICATION;
+        }
+        $token = new Token();
+        $token->user_id = $this->id;
+        $token->type = $type;
+        if($token->save()){
+            return $token;
+        }
+
+        return null;
+    }
+    
+    public function beforeDelete()
+    {
+        Yii::$app->elasticsearch->delete('/ironpal/user/'.$this->id); 
+        return true;
+    }
+
+    public function reindexElastica()
+    {
+        $data = [];
+        $user = $this;
+        if($user->profile) {
+            $user->user_info = $user->profile->attributes;
+        }
+        $data = $user->attributes;
+        if($user->user_info) {
+            $data['search'] = [];
+            foreach ($user->profile->attributes as $attribute => $vl) {
+                $data['search'][] = $vl;
+            }
+            $data['search'] = implode(' ',$data['search']);
+        }
+
+        Yii::$app->elasticsearch->put('/ironpal/user/'.$this->id,[],json_encode($data));
+    }
+
+ public function beforeSave($insert)
+    {
+        if ($insert) {
+            $this->setAttribute('auth_key', \Yii::$app->security->generateRandomString());
+            if (\Yii::$app instanceof \yii\web\Application) {
+                $this->setAttribute('registration_ip', null/*\Yii::$app->request->userIP*/);
+            }
+        }
+
+        if (!empty($this->password)) {
+            $this->setAttribute('password_hash', \dektrium\user\helpers\Password::hash($this->password));
+        }
+
+        return true;
+    }
+    public function afterSave($insert)
+    {
+        $this->reindexElastica();
+        return true;
     }
 }
