@@ -1,5 +1,5 @@
 <?php
-$params = array_merge(
+$params = array_merge(    
     require(__DIR__ . '/../../common/config/params.php'),
     require(__DIR__ . '/../../common/config/params-local.php'),
     require(__DIR__ . '/params.php'),
@@ -10,12 +10,12 @@ return [
     'id' => 'app-api',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
-    'controllerNamespace' => 'api\controllers',
+    'controllerNamespace' => 'api\controllers',    
     'sourceLanguage'=>'ru',
     'language'=>'ru',
     'modules' => [
-        'v1' => [
-            'class' => 'api\modules\v1\Module',
+        $version => [
+            'class' => 'api\modules\\'.$version.'\Module',
         ],
         'user' => [
             'class' => 'dektrium\user\Module',
@@ -32,16 +32,16 @@ return [
             // 'enableStrictParsing' => true,
             'showScriptName' => false,
             'rules' => [            
-                ['pattern' => '','route' => 'v1/test'],
-                ['pattern' => 'v1/<controller>/<action>/<id:\d+>','route' => 'v1/<controller>/<action>'],
-                ['class' => 'yii\rest\UrlRule', 'controller' => 'v1/post'], 
-                ['class' => 'yii\rest\UrlRule', 'controller' => 'v1/followers'],  
-                ['class' => 'yii\rest\UrlRule', 'controller' => 'v1/user'],    
-                ['class' => 'yii\rest\UrlRule', 'controller' => 'v1/car'],   
-                ['class' => 'yii\rest\UrlRule', 'controller' => 'v1/colors'],    
-                ['class' => 'yii\rest\UrlRule', 'controller' => 'v1/searchcar'], 
-                ['class' => 'yii\rest\UrlRule', 'controller' => 'v1/profile'], 
-                ['class' => 'yii\rest\UrlRule', 'controller' => 'v1/countries'], 
+                ['pattern' => '','route' => $version.'/test'],
+                ['pattern' => $version.'/<controller>/<action>/<id:\d+>','route' => $version.'/<controller>/<action>'],
+                ['class' => 'yii\rest\UrlRule', 'controller' => $version.'/post'], 
+                ['class' => 'yii\rest\UrlRule', 'controller' => $version.'/followers'],  
+                ['class' => 'yii\rest\UrlRule', 'controller' => $version.'/user'],    
+                ['class' => 'yii\rest\UrlRule', 'controller' => $version.'/car'],   
+                ['class' => 'yii\rest\UrlRule', 'controller' => $version.'/colors'],    
+                ['class' => 'yii\rest\UrlRule', 'controller' => $version.'/searchcar'], 
+                ['class' => 'yii\rest\UrlRule', 'controller' => $version.'/profile'], 
+                ['class' => 'yii\rest\UrlRule', 'controller' => $version.'/countries'], 
                 //['class' => 'yii\rest\UrlRule', 'controller' => 'v1/regions'], 
                 //['class' => 'yii\rest\UrlRule', 'controller' => 'v1/cities'], 
                 //['class' => 'yii\rest\UrlRule', 'controller' => 'v1/comment'],Regions

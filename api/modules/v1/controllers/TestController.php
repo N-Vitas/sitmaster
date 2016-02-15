@@ -36,7 +36,7 @@ class TestController extends Controller
         $ret['key'] = $key;
         $ret['post'] = \Yii::$app->request->post();
         $ret['name'] = "index";
-        if(\Yii::$app->request->post("access_token") == "FB0kue1c8i810kkgv551E2PDzxX8L81Y")
+        if(\Yii::$app->request->get("access_token") == "FB0kue1c8i810kkgv551E2PDzxX8L81Y")
             $id=1;
         if($id)
         return $ret;

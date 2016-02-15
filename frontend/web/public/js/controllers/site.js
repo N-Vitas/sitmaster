@@ -1,7 +1,7 @@
 $.material.init();
 $( window ).bind('scroll',function(e) {
 	var position = $(document).scrollTop();
-	if(position > 0){
+	if(position > 10){
 		$( ".navbar" ).addClass( "navbar-fixed-top" );
 	}
 	else{

@@ -18,7 +18,8 @@
         "yiisoft/yii2": "*",
         "yiisoft/yii2-bootstrap": "*",
         "yiisoft/yii2-swiftmailer": "*",
-        "dektrium/yii2-user": "0.9.*"
+        "dektrium/yii2-user": "0.9.*",
+        "funson86/yii2-setting": "0.01.*"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",
