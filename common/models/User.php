@@ -46,7 +46,8 @@ class User extends BaseUser
                 ['password', 'required', 'on' => ['register']],
                 ['password', 'string', 'min' => 6, 'on' => ['register', 'create']],
             ];
-    }
+    }    
+
     public function attributes()
     {
         return ['id', 'username', 'email','password_hash','auth_key','confirmed_at','created_at','updated_at','flags','user_info','registration_ip','password_reset_token'];
