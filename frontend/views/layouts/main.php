@@ -5,6 +5,7 @@ use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
 use frontend\widgets\Alert;
+use yii\rbac\Role;
 
 $this->beginContent('@frontend/views/layouts/structure.php') ?>
 <div class="wrap">
@@ -18,7 +19,7 @@ $this->beginContent('@frontend/views/layouts/structure.php') ?>
             ]);
             $menuItems = [
                 ['label' => 'Главная', 'url' => ['/site/index']],
-                ['label' => 'Тесты', 'url' => ['/site/page']],
+                ['label' => 'Создать заявку', 'url' => ['/site/create']],
                 ['label' => 'О сервисе', 'url' => ['/site/about']],
                 ['label' => 'Обратная связь', 'url' => ['/site/contact']],
             ];

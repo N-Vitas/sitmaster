@@ -10,6 +10,8 @@ use \common\models\Token;
 class User extends BaseUser
 {
 
+    public $user_info;
+
     public static function findIdentity($id)
     {
         return static::findOne(['id' => $id]);

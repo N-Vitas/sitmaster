@@ -9,7 +9,7 @@ use yii\bootstrap\ActiveForm;
 $this->title = 'Авторизация';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="site-login">
+<div class="site-login jumbotron">
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>Заполните следующие поля для входа:</p>
