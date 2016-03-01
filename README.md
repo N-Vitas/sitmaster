@@ -6,10 +6,17 @@ Yii 2 Advanced Project Template
 
 Для реализации проэкта используется framework Yii 2
 
-СТРУКТУРА ПРОЭКТА
+СТРУКТУРА ПРОЕКТА
 -------------------
 
 ```
+api
+    components/  
+    config/                        
+    modules/             
+    controllers/     
+    runtime/ 
+    web/
 common
     config/              
     mail/       
