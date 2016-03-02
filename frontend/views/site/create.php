@@ -1,7 +1,7 @@
 <?php
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
-use yii\captcha\Captcha;
+// use yii\captcha\Captcha;
 
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
@@ -18,15 +18,15 @@ $this->params['breadcrumbs'][] = $this->title;
             <?php $form = ActiveForm::begin(['id' => 'contact-form','options' => ['enctype' => 'multipart/form-data']]); ?>
                 <?= $form->field($model, 'title'); ?>
                 <?= $form->field($model, 'text')->textArea(['rows' => 6]); ?>
-                <?//= $form->field($model, 'files')->fileInput(); ?>
+                
                 <?= $form->field($model, 'user_id')->hiddenInput(['value'=> \Yii::$app->user->id])->label(false); ?>
                 <?= $form->field($model, 'cat_id')->hiddenInput(['value'=> \Yii::$app->user->id])->label(false); ?>
                 <?= $form->field($model, 'cat_level')->hiddenInput(['value'=> \Yii::$app->user->id])->label(false); ?>
                 <?= $form->field($model, 'priorited')->hiddenInput(['value'=> "Нормальный"])->label(false); ?>
                 <?= $form->field($model, 'status')->hiddenInput(['value'=> \Yii::$app->user->id])->label(false); ?>
-                <?= $form->field($model, 'verifyCode')->widget(Captcha::className(), [
+                <?php /* $form->field($model, 'verifyCode')->widget(Captcha::className(), [
                     'template' => '<div class="row"><div class="col-lg-2">{image}</div><div class="col-lg-10 btn-raised">{input}</div></div>',
-                ]) ?>
+                ]) */?>
                 <div class="form-group">
                     <?= Html::submitButton('Отправить', ['class' => 'btn btn-primary btn-raised', 'name' => 'contact-button']) ?>
                 </div>

@@ -3,11 +3,12 @@ namespace frontend\controllers;
 
 use Yii;
 use common\models\LoginForm;
+use common\models\Ticket;
 use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
-use common\models\Ticket;
+use frontend\models\TicketSearch;
 use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
 use frontend\components\Controller;
@@ -68,8 +69,10 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
-        $models = Ticket::find()->all();
-        return $this->render('index',compact('models'));
+        // $models = Ticket::find()->all();
+        $searchModel = new TicketSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        return $this->render('index',compact('dataProvider','searchModel'));
     }
     
     public function actionCreate()

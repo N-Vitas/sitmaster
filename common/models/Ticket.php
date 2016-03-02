@@ -25,7 +25,7 @@ class Ticket extends ActiveRecord
 {
     private $email = 'test@test.com';
     private $name = 'contra';
-    public $verifyCode;
+    // public $verifyCode;
     public static function tableName()
     {
         return 'ticket';
@@ -54,10 +54,10 @@ class Ticket extends ActiveRecord
     {
         return [
             [['user_id', 'agent_id', 'cat_level', 'cat_id', 'created_at', 'updated_at', 'closed_at', 'status'], 'integer'],
-            /*[['text'], 'required'],*/
+            [['title','user_id','text'], 'required'],
             [['text', 'json','files','callback'], 'string'],
             [['title', 'priorited'], 'string', 'max' => 255],
-            ['verifyCode', 'captcha'],
+            // ['verifyCode', 'captcha'],
         ];
     }
     /*public function fields()
@@ -223,5 +223,12 @@ class Ticket extends ActiveRecord
     public function getUserName(){
         $user = User::findOne($this->user_id);
         return $user->username;
+    }
+    public function getAgentName(){
+        $user = User::findOne($this->agent_id);
+        if($user)
+        return $user->username;
+        else
+        return "Неназначена";
     }
 }
