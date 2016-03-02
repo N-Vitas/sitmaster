@@ -68,13 +68,14 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
-        //$this->layout = 'landing';
-        return $this->render('index');
+        $models = Ticket::find()->all();
+        return $this->render('index',compact('models'));
     }
+    
     public function actionCreate()
     {
         $model = new Ticket();
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
             if ($model->sendEmail(Yii::$app->params['adminEmail'])) {
                 Yii::$app->session->setFlash('success', 'Thank you for contacting us. We will respond to you as soon as possible.');
             } else {
@@ -90,9 +91,10 @@ class SiteController extends Controller
         return $this->render('create');
     }
 
-    public function actionPage()
+    public function actionPage($id)
     {
-        return $this->render('page');
+        $model = Ticket::findOne((int) $id);
+        return $this->render('page',compact('model'));
     }
 
     public function actionLogin()

@@ -10,9 +10,9 @@ $this->params['breadcrumbs'][] = $this->title;
 		<!-- Детали заявки -->
 		<div class="col-md-3">
 			<div class="md-card__title"><h2 class="mdl-card__title-text">Детали заявки</h2></div>
-			<div class="md-card__supporting-text"><i class="material-icons btn-sm">&#xE867;</i>0000008</div>
-			<div class="md-card__supporting-text"><i class="material-icons btn-sm">&#xE853;</i>test test</div>
-			<div class="md-card__supporting-text"><i class="material-icons btn-sm">&#xE85C;</i>В ожидании</div>
+			<div class="md-card__supporting-text"><i class="material-icons btn-sm">&#xE867;</i><?= $model->id;?></div>
+			<div class="md-card__supporting-text"><i class="material-icons btn-sm">&#xE853;</i><?= $model->getUserName();?></div>
+			<div class="md-card__supporting-text"><i class="material-icons btn-sm">&#xE85C;</i><?= $model->getStatusName();?></div>
 			<div class="md-card__supporting-text"><i class="material-icons btn-sm">&#xE84F;</i>Ресторан 2</div>
 			<div class="md-card__supporting-text"><i class="material-icons btn-sm">&#xE851;</i>Максим Атрешкевич</div>
 			<div class="md-card__supporting-text"><i class="material-icons btn-sm">&#xE925;</i>Нормальный</div>
@@ -23,29 +23,44 @@ $this->params['breadcrumbs'][] = $this->title;
 		<!-- Переписка -->
 		<div class="col-md-9">
             <div class="row">
-             <div class="col-md-10">
-              <div class="panel panel-success">
-                <div class="panel-heading">
-                  <h3 class="panel-title">Анна ивановна</h3>
-                </div>
+             <div class="col-md-12">
+             	<nav class="navbar navbar-success">
+				  <div class="container-fluid">
+				    <div class="navbar-header">
+				      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+				        <span class="sr-only">Toggle navigation</span>
+				        <span class="icon-bar"></span>
+				        <span class="icon-bar"></span>
+				        <span class="icon-bar"></span>
+				      </button>
+				      <a class="navbar-brand" href="#"><?= $model->getUserName();?></a>
+				    </div>
+
+				    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				      <ul class="nav navbar-nav navbar-right">
+				        <li class="dropdown">
+				          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Действия <span class="caret"></span></a>
+				          <ul class="dropdown-menu" role="menu">
+					        <li><a href="#Изменить статус">Изменить статус</a></li>
+					        <li><a href="#Назначить">Назначить</a></li>
+					        <li><a href="#Закрыть">Закрыть</a></li>
+				            <li class="divider"></li>
+				            <li><a href="#">Separated link</a></li>
+				            <li class="divider"></li>
+				            <li><a href="#">One more separated link</a></li>
+				          </ul>
+				        </li>
+				      </ul>				      
+				    </div>
+				  </div>
+				</nav>
+              <div class="panel panel-<?= $model->getStatusColor();?>">
                 <div class="panel-body">
-                  <h2>Example body text</h2>
-					<p>Nullam quis risus eget
-					  <a href="javascript:void(0)">urna mollis ornare</a> vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula.
-					</p>
-
-					<p>
-					  <small>This line of text is meant to be treated as fine print.</small>
-					</p>
-					<p>The following snippet of text is <strong>rendered as bold text</strong>.</p>
-
-					<p>The following snippet of text is <em>rendered as italicized text</em>.</p>
-
-					<p>An abbreviation of the word attribute is <abbr title="attribute">attr</abbr>.</p>
+                  <h2><?= $model->title;?></h2>
+					<p><?= $model->text;?></p>
                 </div>
               </div>
              </div>
-        	 <div class="col-md-2"></div>
             </div>
 
             <div class="row">            

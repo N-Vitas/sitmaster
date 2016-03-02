@@ -187,4 +187,41 @@ class Ticket extends ActiveRecord
             ->setTextBody($this->text)
             ->send();
     }
+
+    public function getStatusColor(){
+        switch ($this->status) {
+            case 1:
+                return "success";
+            case 2:
+                return "primary";
+            case 3:
+                return "danger";
+            case 4:
+                return "info";
+            
+            default:
+                return "success";                
+        }
+    }
+
+    public function getStatusName(){
+        switch ($this->status) {
+            case 1:
+                return "Открыта";
+            case 2:
+                return "В ожидании";
+            case 3:
+                return "Приостановленная";
+            case 4:
+                return "Решена";
+            
+            default:
+                return "Открыта";                
+        }
+    }
+
+    public function getUserName(){
+        $user = User::findOne($this->user_id);
+        return $user->username;
+    }
 }

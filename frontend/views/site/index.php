@@ -75,14 +75,14 @@ $this->title = 'My Yii Application';
             <div class="col-lg-9">
                 <h2>Список завок</h2>
                 <div class="bs-component">
-                  <div class="panel panel-success">
-
+                  <?php foreach ($models as $model): ?>
+                  <div class="panel panel-<?= $model->getStatusColor();?>">
                     <div class="panel-heading">
-                      <h3 class="panel-title">Открытая</h3>
+                      <h3 class="panel-title"><?= $model->title; ?></h3>
                     </div>
                     <div class="panel-body">
                       <div class="row">
-                        <a href="/site/page" >
+                        <a href="/site/page/<?= $model->id; ?>" >
                           <div class="col-lg-3"><i class="material-icons btn-xs">&#xE84F;</i>Мангасуши</div>
                           <div class="col-lg-3"><i class="material-icons btn-xs">&#xE925;</i>Нормальный</div>
                           <div class="col-lg-3"><i class="material-icons btn-xs">&#xE916;</i>26 июня 2016</div>
@@ -91,7 +91,9 @@ $this->title = 'My Yii Application';
                       </div>
                     </div>
                   </div>
+                  <?php endforeach; ?>
 
+                  <!-- Далее демо для цветовой гаммы статуса -->
                   <div class="panel panel-success">
                     <div class="panel-heading">
                       <h3 class="panel-title">Сломалась мышь</h3>
