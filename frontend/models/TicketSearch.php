@@ -20,8 +20,8 @@ class TicketSearch extends Ticket
         return [
             [['id','user_id', 'agent_id', 'cat_level', 'cat_id', 'updated_at', 'closed_at'], 'integer'],
             [['text', 'json','files','callback'], 'string'],
-            [['status','created_at'],'safe'],
-            [['title', 'priorited'], 'string', 'max' => 255],
+            [['status','created_at','priorited'],'safe'],
+            [['title'], 'string', 'max' => 255],
         ];
     }
 
@@ -65,49 +65,44 @@ class TicketSearch extends Ticket
             'cat_id' => $this->cat_id,
             'text' => $this->text,
             'title' => $this->title,
-            'priorited' => $this->priorited,
         ]);        
         if(is_array($this->status)){
             $query->andFilterWhere(['in','status',$this->status]);
+        }       
+        if(is_array($this->priorited)){
+            $query->andFilterWhere(['in','priorited',$this->priorited]);
         }
-
-        // var_dump($this->created_at);die;
         if($this->created_at && !is_numeric($this->created_at)){
             switch ($this->created_at) {
                 case 'all_time':
                     break;
                 case 'today_time':
-                    $query->andFilterWhere(['>=','created_at',(time()-86400)]);                    
+                    $query->andFilterWhere(['>=','created_at',mktime(0,0,0)]);                    
                     break;
-                // case 'yesterday':
-                //     $query->andFilterWhere(['created_at',$this->created_at]);
-                //     break;
+                case 'yesterday':
+                    $query->andFilterWhere(['>=','created_at',mktime(0,0,0)-86400]);
+                    $query->andFilterWhere(['<=','created_at',mktime(0,0,0)]);
+                    break;
                 case 'this_week':
-                    $query->andFilterWhere(['>=','created_at',(time()-86400*7)]);
+                    $query->andFilterWhere(['>=','created_at',strtotime("last Monday")]);
                     break;
-                // case 'last_week':
-                //     $query->andFilterWhere(['created_at',$this->created_at]);
-                //     break;
-                // case 'this_month':
-                //     $query->andFilterWhere(['created_at',$this->created_at]);
-                //     break;
-                // case 'last_month':
-                //     $query->andFilterWhere(['created_at',$this->created_at]);
-                //     break;                
-                // default:
-                //     $query->andFilterWhere(['created_at',$this->created_at]);
-                //     break;
+                case 'last_week':
+                    $query->andFilterWhere(['>=','created_at',strtotime("last Monday")-86400*7]);
+                    $query->andFilterWhere(['<=','created_at',strtotime("last Monday")]);
+                    break;
+                case 'this_month':                
+                    $query->andFilterWhere(['>=','created_at',strtotime('1 '.date('M').' '.date('Y'))]);
+                    break;
+                case 'last_month':
+                    $query->andFilterWhere(['<=','created_at',strtotime('1 '.date('M').' '.date('Y'))]);
+                    break;    
             }
-            // $date = strtotime($this->created_at);
-            // $query->andFilterWhere(['>=','created_at',$date]);
-            // $query->andFilterWhere(['<=','created_at',$date+86400]);
         }else{
             $query->andFilterWhere(['created_at' => $this->created_at]);
         }
 
         $query->andFilterWhere(['like', 'text', $this->text])
-            ->andFilterWhere(['like', 'title', $this->title])
-            ->andFilterWhere(['like', 'priorited', $this->priorited]);
+            ->andFilterWhere(['like', 'title', $this->title]);
         // echo '<pre>';var_dump($query);die;
         return $dataProvider;
     }

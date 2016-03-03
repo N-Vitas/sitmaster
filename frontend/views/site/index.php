@@ -19,7 +19,10 @@ $this->title = 'Заявки';
               <?php $form = ActiveForm::begin([
                   'action' => ['index'],
                   'method' => 'get',
-              ]); ?>
+              ]); 
+              ?>
+              <?php $user = \Yii::$app->user->identity;?>
+              <?= \Yii::$app->user->identity->getRoleName()?>
               <div class="form-group">
               <p class="lead">Дата создания</p>
                       <select name="TicketSearch[created_at]" id="select111" class="form-control">
@@ -27,9 +30,9 @@ $this->title = 'Заявки';
                         <option value="today_time"<?= $searchModel->created_at == 'today_time' ? 'selected':'';?>>Сегодня</option>
                         <option value="yesterday"<?= $searchModel->created_at == 'yesterday' ? 'selected':'';?>>Вчера</option>
                         <option value="this_week"<?= $searchModel->created_at == 'this_week' ? 'selected':'';?>>Текущая неделя</option>
-                        <option value="last_week"<?= $searchModel->created_at == 'last_week' ? 'selected':'';?>>За последнюю неделю</option>
+                        <option value="last_week"<?= $searchModel->created_at == 'last_week' ? 'selected':'';?>>За прошлую неделю</option>
                         <option value="this_month"<?= $searchModel->created_at == 'this_month' ? 'selected':'';?>>За текущий месяц</option>
-                        <option value="last_month"<?= $searchModel->created_at == 'last_month' ? 'selected':'';?>>За последний месяц</option>
+                        <option value="last_month"<?= $searchModel->created_at == 'last_month' ? 'selected':'';?>>За прошлый месяц</option>
                       </select>
                   </div>
               <p class="lead">Статус.</p>       
@@ -53,7 +56,7 @@ $this->title = 'Заявки';
                       <input type="checkbox" name="TicketSearch[status][]" id="inlineCheckbox3" value="4" <?=in_array(4, (array)$searchModel->status)?'checked':''?>/> Решена
                   </label> 
                   </div>
-
+              <?php if(\Yii::$app->user->identity->role_id > 1):?>
               <p class="lead">Группа.</p>     
                 <div class="checkbox">
                   <label class="checkbox-inline">
@@ -65,16 +68,16 @@ $this->title = 'Заявки';
                       <input type="checkbox" id="inlineCheckbox2" value="option2"> Кафе
                   </label>
                   </div>
-
+              <?php endif;?>
               <p class="lead">Приоритет.</p>     
                 <div class="checkbox">
                   <label class="checkbox-inline">
-                      <input type="checkbox" id="inlineCheckbox1" value="option1"> Нормальный
+                      <input type="checkbox" <?=in_array('Нормальный', (array)$searchModel->priorited)?'checked':''?> name="TicketSearch[priorited][]" id="inlineCheckbox1" value="Нормальный"/> Нормальный
                   </label>
                   </div>
                   <div class="checkbox">
                   <label class="checkbox-inline">
-                      <input type="checkbox" id="inlineCheckbox2" value="option2"> Срочный
+                      <input type="checkbox" <?=in_array('Срочный', (array)$searchModel->priorited)?'checked':''?> name="TicketSearch[priorited][]" id="inlineCheckbox2" value="Срочный"/> Срочный
                   </label>
                   </div>
 

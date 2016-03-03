@@ -52,7 +52,7 @@ class User extends BaseUser
 
     public function attributes()
     {
-        return ['id', 'username', 'email','password_hash','auth_key','confirmed_at','created_at','updated_at','flags','user_info','registration_ip','password_reset_token'];
+        return ['id', 'role_id','cat_id','cat_level','username', 'email','password_hash','auth_key','confirmed_at','created_at','updated_at','flags','user_info','registration_ip','password_reset_token'];
     }
     public function getProfile()
     {
@@ -153,7 +153,7 @@ class User extends BaseUser
     
     public function beforeDelete()
     {
-        Yii::$app->elasticsearch->delete('/ironpal/user/'.$this->id); 
+        // Yii::$app->elasticsearch->delete('/ironpal/user/'.$this->id); 
         return true;
     }
 
@@ -193,7 +193,13 @@ class User extends BaseUser
     }
     public function afterSave($insert)
     {
-        $this->reindexElastica();
+        // $this->reindexElastica();
         return true;
+    }
+    public function getRoleName()
+    {
+        $role = \common\models\Role::findOne($this->role_id);
+        return $role->title;  
+        // return 'test';
     }
 }
