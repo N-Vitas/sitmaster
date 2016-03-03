@@ -25,7 +25,6 @@ class Ticket extends ActiveRecord
 {
     private $email = 'test@test.com';
     private $name = 'contra';
-    // public $verifyCode;
     public static function tableName()
     {
         return 'ticket';

@@ -3,48 +3,54 @@ use yii\widgets\ListView;
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\widgets\Pjax;
 
-$this->title = 'My Yii Application';
+$this->title = 'Заявки';
 ?>
 <div class="site-index">
   <div class="jumbotron">
-    <?php \yii\widgets\Pjax::begin([
+    <?php Pjax::begin([
       'id'=>'ticket-pjax',
     ]); ?> 
       <div class="row">
           <!-- Форма фильтра -->
           <div class="col-lg-3">
-              <h2>Фильтр</h2>
-              <?php $form = ActiveForm::begin(['id' => 'ticket-pjax','method' => 'get','options' => ['data-pjax' => true ]]); ?>              
+              <h2>Фильтр</h2>        
+              <?php $form = ActiveForm::begin([
+                  'action' => ['index'],
+                  'method' => 'get',
+              ]); ?>
               <div class="form-group">
               <p class="lead">Дата создания</p>
-                      <select id="select111" class="form-control">
-                        <option>Любое время</option>
-                        <option>Сегодня</option>
-                        <option>Вчера</option>
-                        <option>Текущая неделя</option>
-                        <option>За последнюю неделю</option>
-                        <option>За текущий месяц</option>
-                        <option>За последний месяц</option>
+                      <select name="TicketSearch[created_at]" id="select111" class="form-control">
+                        <option value="all_time"<?= $searchModel->created_at == 'all_time' ? 'selected':'';?>>Любое время</option>
+                        <option value="today_time"<?= $searchModel->created_at == 'today_time' ? 'selected':'';?>>Сегодня</option>
+                        <option value="yesterday"<?= $searchModel->created_at == 'yesterday' ? 'selected':'';?>>Вчера</option>
+                        <option value="this_week"<?= $searchModel->created_at == 'this_week' ? 'selected':'';?>>Текущая неделя</option>
+                        <option value="last_week"<?= $searchModel->created_at == 'last_week' ? 'selected':'';?>>За последнюю неделю</option>
+                        <option value="this_month"<?= $searchModel->created_at == 'this_month' ? 'selected':'';?>>За текущий месяц</option>
+                        <option value="last_month"<?= $searchModel->created_at == 'last_month' ? 'selected':'';?>>За последний месяц</option>
                       </select>
                   </div>
               <p class="lead">Статус.</p>       
                 <div class="checkbox">
-                  <?= $form->field($searchModel, 'status')->checkbox(['value' => 1])->label('Открыта'); ?>
-                  </div>
-                  <div class="checkbox">
                   <label class="checkbox-inline">
-                      <input type="checkbox" id="inlineCheckbox2" value="option2"> В ожидании
+                    <input type="checkbox" name="TicketSearch[status][]" id="inlineCheckbox2" value="1" <?=in_array(1, (array)$searchModel->status)?'checked':''?>/> Открыта
                   </label>
                   </div>
                   <div class="checkbox">
                   <label class="checkbox-inline">
-                      <input type="checkbox" id="inlineCheckbox3" value="option3"> Приостановлена
+                      <input type="checkbox" name="TicketSearch[status][]" id="inlineCheckbox2" value="2" <?=in_array(2, (array)$searchModel->status)?'checked':''?>/> В ожидании
+                  </label>
+                  </div>
+                  <div class="checkbox">
+                  <label class="checkbox-inline">
+                      <input type="checkbox" name="TicketSearch[status][]" id="inlineCheckbox3" value="3" <?=in_array(3, (array)$searchModel->status)?'checked':''?>/> Приостановлена
                   </label> 
                   </div>
                   <div class="checkbox">
                   <label class="checkbox-inline">
-                      <input type="checkbox" id="inlineCheckbox3" value="option3"> Решена
+                      <input type="checkbox" name="TicketSearch[status][]" id="inlineCheckbox3" value="4" <?=in_array(4, (array)$searchModel->status)?'checked':''?>/> Решена
                   </label> 
                   </div>
 
@@ -103,18 +109,8 @@ $this->title = 'My Yii Application';
                   ],
                 ]); ?>
               </div>
-              <!-- Пос навигация --
-              <ul class="pagination pagination-sm">
-                <li class="disabled"><a href="javascript:void(0)">«</a></li>
-                <li class="active"><a href="javascript:void(0)">1</a></li>
-                <li><a href="javascript:void(0)">2</a></li>
-                <li><a href="javascript:void(0)">3</a></li>
-                <li><a href="javascript:void(0)">4</a></li>
-                <li><a href="javascript:void(0)">5</a></li>
-                <li><a href="javascript:void(0)">»</a></li>
-              </ul> <!-- Конец списка -->
           </div> <!-- Конец списка -->
       </div>
-    <?php \yii\widgets\Pjax::end(); ?>
+    <?php Pjax::end(); ?>
   </div>
 </div>
