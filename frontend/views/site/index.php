@@ -4,6 +4,7 @@ use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\widgets\Pjax;
+use \common\models\Group;
 
 $this->title = 'Заявки';
 ?>
@@ -22,7 +23,6 @@ $this->title = 'Заявки';
               ]); 
               ?>
               <?php $user = \Yii::$app->user->identity;?>
-              <?= \Yii::$app->user->identity->getRoleName()?>
               <div class="form-group">
               <p class="lead">Дата создания</p>
                       <select name="TicketSearch[created_at]" id="select111" class="form-control">
@@ -36,7 +36,7 @@ $this->title = 'Заявки';
                       </select>
                   </div>
               <p class="lead">Статус.</p>       
-                <div class="checkbox">
+                  <div class="checkbox">
                   <label class="checkbox-inline">
                     <input type="checkbox" name="TicketSearch[status][]" id="inlineCheckbox2" value="1" <?=in_array(1, (array)$searchModel->status)?'checked':''?>/> Открыта
                   </label>
@@ -56,19 +56,41 @@ $this->title = 'Заявки';
                       <input type="checkbox" name="TicketSearch[status][]" id="inlineCheckbox3" value="4" <?=in_array(4, (array)$searchModel->status)?'checked':''?>/> Решена
                   </label> 
                   </div>
-              <?php if(\Yii::$app->user->identity->role_id > 1):?>
-              <p class="lead">Группа.</p>     
-                <div class="checkbox">
-                  <label class="checkbox-inline">
-                      <input type="checkbox" id="inlineCheckbox1" value="option1"> Ресторан
-                  </label>
-                  </div>
-                  <div class="checkbox">
-                  <label class="checkbox-inline">
-                      <input type="checkbox" id="inlineCheckbox2" value="option2"> Кафе
-                  </label>
-                  </div>
+
+              <?php $group = \Yii::$app->user->identity->getGroups();?>
+              <?php if($group):?>
+                <p class="lead">Группа.</p>     
+                <?php foreach($group AS $top):?>
+                  <?php if($top->level):?>
+                    <div class="checkbox">
+                      <label class="checkbox-inline">
+                          <input type="checkbox" name="TicketSearch[cat_level][]" id="inlineCheckbox1" value="<?= $top->id?>" 
+                          <?=in_array($top->id, (array)$searchModel->cat_level)?'checked':''?>/> <?= $top->title?>
+                      </label>
+                    </div>    
+                  <?php else:?>
+                    <div class="lead-group">
+                      <div class="checkbox btn-checkbox">
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="TicketSearch[cat_id][]" id="inlineCheckbox1" value="<?= $top->id?>" 
+                            <?=in_array($top->id, (array)$searchModel->cat_id)?'checked':''?>/> <?= $top->title?>
+                        </label>
+                        <i class="material-icons icons-right">arrow_drop_down_circle</i> <!-- &#xE5C7; &#xE5C5; -->
+                      </div>
+                      <?php $items = Group::find()->where(['level'=>$top->id])->all();?>              
+                    <?php foreach($items AS $item):?>
+                      <div class="checkbox checkbox-group">
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="TicketSearch[cat_level][]" id="inlineCheckbox1" value="<?= $item->id?>" 
+                            <?=in_array($item->id, (array)$searchModel->cat_level)?'checked':''?>/> <?= $item->title?>
+                        </label>
+                      </div>
+                    <?php endforeach;?>
+                    </div>
+                  <?php endif;?>
+                <?php endforeach;?>
               <?php endif;?>
+
               <p class="lead">Приоритет.</p>     
                 <div class="checkbox">
                   <label class="checkbox-inline">

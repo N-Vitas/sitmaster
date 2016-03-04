@@ -18,9 +18,9 @@ class TicketSearch extends Ticket
     public function rules()
     {
         return [
-            [['id','user_id', 'agent_id', 'cat_level', 'cat_id', 'updated_at', 'closed_at'], 'integer'],
+            [['id','user_id', 'agent_id', 'updated_at', 'closed_at'], 'integer'],
             [['text', 'json','files','callback'], 'string'],
-            [['status','created_at','priorited'],'safe'],
+            [['status','created_at','priorited', 'cat_level', 'cat_id'],'safe'],
             [['title'], 'string', 'max' => 255],
         ];
     }
@@ -42,7 +42,30 @@ class TicketSearch extends Ticket
      */
     public function search($params)
     {
-        $query = Ticket::find();
+        switch (\Yii::$app->user->identity->role_id) {
+            case 1:
+                $group = \Yii::$app->user->identity->getGroups();
+                foreach ($group as $item) {
+                    $query = Ticket::find()->where(['cat_level' => $item->id]);
+                    break;                  
+                }
+                break;
+            case 2:
+                foreach ($group as $item) {
+                    $query = Ticket::find()->where(['cat_level' => $item->id]);  
+                    break;                                    
+                }
+                break;
+            case 3:
+                foreach ($group as $item) {
+                    $id[] = $item->id;
+                }
+                $query = Ticket::find()->where(['in','cat_id',$id]);                    
+                break;            
+            default:
+                $query = Ticket::find();
+                break;
+        }
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -61,11 +84,20 @@ class TicketSearch extends Ticket
             'id' => $this->id,
             'user_id' => $this->user_id,
             'agent_id' => $this->agent_id,
-            'cat_level' => $this->cat_level,
-            'cat_id' => $this->cat_id,
             'text' => $this->text,
             'title' => $this->title,
-        ]);        
+        ]);       
+        if(is_array($this->cat_id) && is_array($this->cat_level)){
+            $cat_id = array_merge($this->cat_id,$this->cat_level);
+            $query->andFilterWhere(['in','cat_id',$cat_id]);
+        }else{  
+            if(is_array($this->cat_level)){
+                $query->andFilterWhere(['in','cat_id',$this->cat_level]);
+            }       
+            if(is_array($this->cat_id)){
+                $query->andFilterWhere(['in','cat_id',$this->cat_id]);
+            }     
+        }         
         if(is_array($this->status)){
             $query->andFilterWhere(['in','status',$this->status]);
         }       

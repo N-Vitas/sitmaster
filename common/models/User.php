@@ -6,6 +6,9 @@ use dektrium\user\models\User as BaseUser;
 use \common\models\Post;
 use \common\models\Profile;
 use \common\models\Token;
+use \common\models\UserGroup;
+use \common\models\Group;
+
 
 class User extends BaseUser
 {
@@ -201,5 +204,20 @@ class User extends BaseUser
         $role = \common\models\Role::findOne($this->role_id);
         return $role->title;  
         // return 'test';
+    }
+    public function getGroups(){
+        $user_groups = UserGroup::find()->where(['user_id'=>$this->id])->all();
+        if($user_groups){
+            foreach ($user_groups as $user_group) {
+                $group_id[] = $user_group->group_id;                
+            }
+            $groups = Group::find()->where(['id' => $group_id,'level' => 0])->all();
+            if($groups)
+                return $groups;
+            $groups = Group::find()->where(['id' => $group_id])->all();            
+            return $groups;
+        }
+        else
+            return false;
     }
 }

@@ -1,0 +1,11 @@
+
+.checkbox-group {
+    position: relative;
+    left: 25px;
+}
+
+.icons-right {
+	float:right;
+	cursor: pointer;
+    color: #009688;
+}

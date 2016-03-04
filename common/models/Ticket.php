@@ -6,6 +6,7 @@ use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
+use \common\models\Group;
 
 /**
  * User model
@@ -217,6 +218,11 @@ class Ticket extends ActiveRecord
             default:
                 return "Открыта";                
         }
+    }
+
+    public function getGroupName(){
+        $group = Group::findOne($this->cat_id);
+        return $group->title;
     }
 
     public function getUserName(){
