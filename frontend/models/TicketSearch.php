@@ -42,9 +42,9 @@ class TicketSearch extends Ticket
      */
     public function search($params)
     {
+        $group = \Yii::$app->user->identity->getGroups();
         switch (\Yii::$app->user->identity->role_id) {
             case 1:
-                $group = \Yii::$app->user->identity->getGroups();
                 foreach ($group as $item) {
                     $query = Ticket::find()->where(['cat_level' => $item->id]);
                     break;                  
@@ -52,9 +52,9 @@ class TicketSearch extends Ticket
                 break;
             case 2:
                 foreach ($group as $item) {
-                    $query = Ticket::find()->where(['cat_level' => $item->id]);  
-                    break;                                    
+                    $id[] = $item->id;                                  
                 }
+                $query = Ticket::find()->where(['in','cat_id',$id]); 
                 break;
             case 3:
                 foreach ($group as $item) {
