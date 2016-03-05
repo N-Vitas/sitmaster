@@ -53,8 +53,8 @@ class Ticket extends ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'agent_id', 'cat_level', 'cat_id', 'created_at', 'updated_at', 'closed_at', 'status'], 'integer'],
-            [['title','user_id','text'], 'required'],
+            [['user_id', 'agent_id', 'created_at','cat_level', 'cat_id', 'updated_at', 'closed_at', 'status'], 'integer'],
+            [['title','user_id','text','priorited'], 'required'],
             [['text', 'json','files','callback'], 'string'],
             [['title', 'priorited'], 'string', 'max' => 255],
             // ['verifyCode', 'captcha'],
@@ -116,15 +116,13 @@ class Ticket extends ActiveRecord
     //     return true;
     // }
 
-    // public function beforeValidate(){
-
-    //     $data = json_decode($this->data,true);
-    //     if(isset($data['subcategory'])){
-    //         $this->expires_at = self::setLifeTime($data['subcategory']);
-    //     }   
-    //     // echo "<pre>";var_dump($this->created_at);die;
-    //     return true;
-    // }
+    public function beforeValidate(){
+        if(!is_array($this->cat_level) && !is_array($this->cat_id) ){
+            $group = Group::findOne($this->cat_id);
+            $this->cat_level = $group->level;
+        }
+        return true;
+    }
 
     // public function afterSave($insert)
     // {
@@ -139,45 +137,6 @@ class Ticket extends ActiveRecord
     //     return true;
     // }
 
-    // public static function setLifeTime($subcategory,$time = null){
-    //     if($time == null)
-    //         $time = time();
-    //     switch ($subcategory) {
-    //         case 'Пробки' :
-    //             return ($time+5*3600);
-    //         case 'ДТП' :                
-    //             return ($time+5*3600);
-    //         case 'Парковки' :                
-    //             return ($time+5*3600);
-    //         case 'Смешное' :                
-    //             return ($time+6*3600);
-    //         case 'Ремонт' :                
-    //             return ($time+5*3600);
-    //         case 'Плохая дорога' :                
-    //             return ($time+5*3600);
-    //         case 'SOS' :                
-    //             return ($time+5*3600);
-    //         case 'Радары' :                
-    //             return ($time+5*3600);            
-    //         default:                
-    //             return $time;
-    //     }
-
-    // }
-
-    // public static function getSubcategoryList()
-    // {
-    //     return [
-    //         'Пробки',
-    //         'ДТП',
-    //         'Парковки',
-    //         'Смешное',
-    //         'Ремонт',
-    //         'Плохая дорога',
-    //         'SOS',
-    //         'Радары',
-    //     ];
-    // }
     public function sendEmail($email)
     {
         return Yii::$app->mailer->compose()

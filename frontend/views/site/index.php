@@ -10,9 +10,9 @@ $this->title = 'Заявки';
 ?>
 <div class="site-index">
   <div class="jumbotron">
-    <?php Pjax::begin([
-      'id'=>'ticket-pjax',
-    ]); ?> 
+    <?php Pjax::begin()#[
+      // 'id'=>'ticket-pjax',
+    #]); ?> 
       <div class="row">
           <!-- Форма фильтра -->
           <div class="col-lg-3">
@@ -25,7 +25,7 @@ $this->title = 'Заявки';
               <?php $user = \Yii::$app->user->identity;?>
               <div class="form-group">
               <p class="lead">Дата создания</p>
-                      <select name="TicketSearch[created_at]" id="select111" class="form-control">
+                      <select name="TicketSearch[created_at]" class="form-control">
                         <option value="all_time"<?= $searchModel->created_at == 'all_time' ? 'selected':'';?>>Любое время</option>
                         <option value="today_time"<?= $searchModel->created_at == 'today_time' ? 'selected':'';?>>Сегодня</option>
                         <option value="yesterday"<?= $searchModel->created_at == 'yesterday' ? 'selected':'';?>>Вчера</option>
@@ -34,37 +34,37 @@ $this->title = 'Заявки';
                         <option value="this_month"<?= $searchModel->created_at == 'this_month' ? 'selected':'';?>>За текущий месяц</option>
                         <option value="last_month"<?= $searchModel->created_at == 'last_month' ? 'selected':'';?>>За прошлый месяц</option>
                       </select>
-                  </div>
+              </div>
               <p class="lead">Статус.</p>       
                   <div class="checkbox">
                   <label class="checkbox-inline">
-                    <input type="checkbox" name="TicketSearch[status][]" id="inlineCheckbox2" value="1" <?=in_array(1, (array)$searchModel->status)?'checked':''?>/> Открыта
+                    <input type="checkbox" name="TicketSearch[status][]" value="1" <?=in_array(1, (array)$searchModel->status)?'checked':''?>/> Открыта
                   </label>
                   </div>
                   <div class="checkbox">
                   <label class="checkbox-inline">
-                      <input type="checkbox" name="TicketSearch[status][]" id="inlineCheckbox2" value="2" <?=in_array(2, (array)$searchModel->status)?'checked':''?>/> В ожидании
+                      <input type="checkbox" name="TicketSearch[status][]" value="2" <?=in_array(2, (array)$searchModel->status)?'checked':''?>/> В ожидании
                   </label>
                   </div>
                   <div class="checkbox">
                   <label class="checkbox-inline">
-                      <input type="checkbox" name="TicketSearch[status][]" id="inlineCheckbox3" value="3" <?=in_array(3, (array)$searchModel->status)?'checked':''?>/> Приостановлена
+                      <input type="checkbox" name="TicketSearch[status][]" value="3" <?=in_array(3, (array)$searchModel->status)?'checked':''?>/> Приостановлена
                   </label> 
                   </div>
                   <div class="checkbox">
                   <label class="checkbox-inline">
-                      <input type="checkbox" name="TicketSearch[status][]" id="inlineCheckbox3" value="4" <?=in_array(4, (array)$searchModel->status)?'checked':''?>/> Решена
+                      <input type="checkbox" name="TicketSearch[status][]" value="4" <?=in_array(4, (array)$searchModel->status)?'checked':''?>/> Решена
                   </label> 
                   </div>
 
+              <?php if($user->role_id > 3):?>
               <?php $group = \Yii::$app->user->identity->getGroups();?>
-              <?php if($group):?>
                 <p class="lead">Группа.</p>     
                 <?php foreach($group AS $top):?>
                   <?php if($top->level):?>
                     <div class="checkbox">
                       <label class="checkbox-inline">
-                          <input type="checkbox" name="TicketSearch[cat_level][]" id="inlineCheckbox1" value="<?= $top->id?>" 
+                          <input type="checkbox" name="TicketSearch[cat_level][]" value="<?= $top->id?>" 
                           <?=in_array($top->id, (array)$searchModel->cat_level)?'checked':''?>/> <?= $top->title?>
                       </label>
                     </div>    
@@ -72,7 +72,7 @@ $this->title = 'Заявки';
                     <div class="lead-group">
                       <div class="checkbox btn-checkbox">
                         <label class="checkbox-inline">
-                            <input type="checkbox" name="TicketSearch[cat_id][]" id="inlineCheckbox1" value="<?= $top->id?>" 
+                            <input type="checkbox" name="TicketSearch[cat_id][]" value="<?= $top->id?>" 
                             <?=in_array($top->id, (array)$searchModel->cat_id)?'checked':''?>/> <?= $top->title?>
                         </label>
                         <i class="material-icons icons-right">arrow_drop_down_circle</i> <!-- &#xE5C7; &#xE5C5; -->
@@ -81,7 +81,7 @@ $this->title = 'Заявки';
                     <?php foreach($items AS $item):?>
                       <div class="checkbox checkbox-group">
                         <label class="checkbox-inline">
-                            <input type="checkbox" name="TicketSearch[cat_level][]" id="inlineCheckbox1" value="<?= $item->id?>" 
+                            <input type="checkbox" name="TicketSearch[cat_level][]" value="<?= $item->id?>" 
                             <?=in_array($item->id, (array)$searchModel->cat_level)?'checked':''?>/> <?= $item->title?>
                         </label>
                       </div>
@@ -94,12 +94,12 @@ $this->title = 'Заявки';
               <p class="lead">Приоритет.</p>     
                 <div class="checkbox">
                   <label class="checkbox-inline">
-                      <input type="checkbox" <?=in_array('Нормальный', (array)$searchModel->priorited)?'checked':''?> name="TicketSearch[priorited][]" id="inlineCheckbox1" value="Нормальный"/> Нормальный
+                      <input type="checkbox" <?=in_array('Нормальный', (array)$searchModel->priorited)?'checked':''?> name="TicketSearch[priorited][]" value="Нормальный"/> Нормальный
                   </label>
                   </div>
                   <div class="checkbox">
                   <label class="checkbox-inline">
-                      <input type="checkbox" <?=in_array('Срочный', (array)$searchModel->priorited)?'checked':''?> name="TicketSearch[priorited][]" id="inlineCheckbox2" value="Срочный"/> Срочный
+                      <input type="checkbox" <?=in_array('Срочный', (array)$searchModel->priorited)?'checked':''?> name="TicketSearch[priorited][]" value="Срочный"/> Срочный
                   </label>
                   </div>
 
@@ -117,9 +117,6 @@ $this->title = 'Заявки';
                   'dataProvider' => $dataProvider,
                   'itemOptions' => ['class' => 'item'],
                   'itemView' => 'list_item',
-                  // 'itemView' => function ($model, $key, $index, $widget) {
-                  //   return $this->render('list_item', ['model' => $model]);
-                  // },
                   'layout' => "{items}\n{summary}\n{pager}",
                   'options' => [
                     'id' => 'listview'

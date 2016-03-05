@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\Ticket;
+use common\models\Group;
 
 /**
  * OrderSearch represents the model behind the search form about `common\models\Ticket`.
@@ -46,8 +47,7 @@ class TicketSearch extends Ticket
         switch (\Yii::$app->user->identity->role_id) {
             case 1:
                 foreach ($group as $item) {
-                    $query = Ticket::find()->where(['cat_level' => $item->id]);
-                    break;                  
+                    $query = Ticket::find()->where(['cat_level' => $item->id]);                 
                 }
                 break;
             case 2:
@@ -55,13 +55,31 @@ class TicketSearch extends Ticket
                     $id[] = $item->id;                                  
                 }
                 $query = Ticket::find()->where(['in','cat_id',$id]); 
+                foreach ($group as $top) {
+                    if($top->level)
+                        $id[] = $top->id;
+                    else{
+                        $id[] = $top->id;
+                        $items = Group::find()->where(['level'=>$top->id])->all();
+                        foreach($items AS $item)
+                            $id[] = $item->id;
+                    }                                   
+                }
+                $query = Ticket::find()->where(['in','cat_id',$id]);  
                 break;
             case 3:
-                foreach ($group as $item) {
-                    $id[] = $item->id;
+                foreach ($group as $top) {
+                    if($top->level)
+                        $id[] = $top->id;
+                    else{
+                        $id[] = $top->id;
+                        $items = Group::find()->where(['level'=>$top->id])->all();
+                        foreach($items AS $item)
+                            $id[] = $item->id;
+                    }                                   
                 }
-                $query = Ticket::find()->where(['in','cat_id',$id]);                    
-                break;            
+                $query = Ticket::find()->where(['in','cat_id',$id]);  
+                break;           
             default:
                 $query = Ticket::find();
                 break;
@@ -78,26 +96,28 @@ class TicketSearch extends Ticket
         if (!($this->load($params) && $this->validate())) {
             return $dataProvider;
         }
-        // var_dump($this->attributes);
-               
+        // echo '<pre>';var_dump($this);die;
         $query->andFilterWhere([
             'id' => $this->id,
             'user_id' => $this->user_id,
             'agent_id' => $this->agent_id,
             'text' => $this->text,
             'title' => $this->title,
-        ]);       
-        if(is_array($this->cat_id) && is_array($this->cat_level)){
+        ]); 
+        // var_dump($this->status);die;
+        if(is_array($this->cat_id) and is_array($this->cat_level)){
             $cat_id = array_merge($this->cat_id,$this->cat_level);
             $query->andFilterWhere(['in','cat_id',$cat_id]);
         }else{  
             if(is_array($this->cat_level)){
                 $query->andFilterWhere(['in','cat_id',$this->cat_level]);
+                // echo '<pre>';var_dump($cat_id);die;
             }       
             if(is_array($this->cat_id)){
                 $query->andFilterWhere(['in','cat_id',$this->cat_id]);
             }     
-        }         
+        }   
+
         if(is_array($this->status)){
             $query->andFilterWhere(['in','status',$this->status]);
         }       
