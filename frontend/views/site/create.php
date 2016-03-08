@@ -41,7 +41,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     else{
                         echo $form->field($model, 'cat_id')->hiddenInput(['value'=> $category[0]])->label(false);
                     }
-                ?>                
+                ?>     
+       
                 <?= $form->field($model, 'text')->textArea(['rows' => 6]); ?>
                 <?= $form->field($model, 'user_id')->hiddenInput(['value'=> \Yii::$app->user->id])->label(false); ?>
                 <?= $form->field($model, 'status')->hiddenInput(['value'=> 1])->label(false); ?>

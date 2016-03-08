@@ -7,6 +7,7 @@ use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 use \common\models\Group;
+use yii\web\UploadedFile;
 
 /**
  * User model
@@ -108,7 +109,7 @@ class Ticket extends ActiveRecord
             'closed_at' => Yii::t('app','Дата закрытия'),
             'verifyCode' => Yii::t('app','Проверочный код'),
         ];
-    }    
+    }   
     // public function beforeDelete()
     // {
     //     Newsline::deleteAll("post_id = ".$this->id);
@@ -116,13 +117,13 @@ class Ticket extends ActiveRecord
     //     return true;
     // }
 
-    public function beforeValidate(){
-        if(!is_array($this->cat_level) && !is_array($this->cat_id) ){
-            $group = Group::findOne($this->cat_id);
-            $this->cat_level = $group->level;
-        }
-        return true;
-    }
+    // public function beforeValidate(){
+    //     if(!is_array($this->cat_level) or !is_array($this->cat_id) ){
+    //         $group = Group::findOne($this->cat_id);
+    //         $this->cat_level = $group->level;
+    //     }
+    //     return true;
+    // }
 
     // public function afterSave($insert)
     // {

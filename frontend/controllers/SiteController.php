@@ -2,6 +2,7 @@
 namespace frontend\controllers;
 
 use Yii;
+use yii\web\UploadedFile;
 use common\models\LoginForm;
 use common\models\Ticket;
 use frontend\models\PasswordResetRequestForm;
@@ -78,7 +79,9 @@ class SiteController extends Controller
     public function actionCreate()
     {
         $model = new Ticket();
+        
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            
             if ($model->sendEmail(Yii::$app->params['adminEmail'])) {
                 Yii::$app->session->setFlash('success', 'Thank you for contacting us. We will respond to you as soon as possible.');
             } else {
