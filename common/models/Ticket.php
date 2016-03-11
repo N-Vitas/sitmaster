@@ -26,7 +26,10 @@ use yii\web\UploadedFile;
 class Ticket extends ActiveRecord
 {
     private $email = 'test@test.com';
-    private $name = 'contra';
+    private $name = 'contra';    
+    public $file;
+    private $path;
+    public $url = 'uploads';
     public static function tableName()
     {
         return 'ticket';
@@ -46,7 +49,8 @@ class Ticket extends ActiveRecord
                     ActiveRecord::EVENT_BEFORE_INSERT => ['created_at', 'updated_at'],
                     ActiveRecord::EVENT_BEFORE_UPDATE => ['updated_at'],
                 ],
-            ]];
+            ]
+        ];
 
 
     }
@@ -58,37 +62,48 @@ class Ticket extends ActiveRecord
             [['title','user_id','text','priorited'], 'required'],
             [['text', 'json','files','callback'], 'string'],
             [['title', 'priorited'], 'string', 'max' => 255],
+            [['file'], 'file', 'extensions' => 'gif, jpg, png, jpeg','maxSize' => 15048576],
             // ['verifyCode', 'captcha'],
         ];
     }
-    /*public function fields()
-    {
+    // public function afterSave($insert)
+    // {
+    //     $basePath = \Yii::$app->baseUrl;        
+    //     // var_dump($basePath);die;
+    //     if(!is_dir($dirPath)){
+    //         mkdir($dirPath,0777,true);
+    //     }
+    //     @$exif = exif_read_data($this->file->tempName);
+    //        move_uploaded_file($this->file->tempName, $basePath."/".$this->file->tempName);
+    // }   
+    // public function beforeDelete()
+    // {
+    //     $basePath = \Yii::getAlias($this->url);
+    //     switch ($this->category){
+    //         case 'avatar':
+    //             $image = $basePath ? $basePath.'/avatar/'.$this->id.'.jpg':'/avatar/'.$this->id.'.jpg';                               
+    //             break;
+    //         case 'cover':
+    //             $image = $basePath ? $basePath.'/avatar/'.$this->parent_user_id.'_cover.jpg':'/avatar/'.$this->parent_user_id.'_cover.jpg';                               
+    //             break;
+    //         case 'carsfirst':
+    //             $image = $basePath ? $basePath.'/garage/landing/'.Images::getUrl($this->id,$this->type):'/garage/landing/'.Images::getUrl($this->id,$this->type);                               
+    //             break;
+    //         case 'carslast':
+    //             $image = $basePath ? $basePath.'/garage/custom/'.Images::getUrl($this->id,$this->type):'/garage/custom/'.Images::getUrl($this->id,$this->type);                               
+    //             break;
+            
+    //         default:
+    //             $image = $basePath ? $basePath.'/'.Images::getUrl($this->id,$this->type):Images::getUrl($this->id,$this->type);               
+    //             break;
+    //     }
+    //     if(file_exists($image))
+    //     {
+    //         unlink($image);
+    //     }
+    //     return true;
+    // }
 
-        return [
-            // field name is the same as the attribute name
-            'id'=>function($model){
-                return (int)$model->id;
-            },            
-            'parent_user_id' => 'parent_user_id',
-            'status' => 'status',
-            'text' => 'text',
-            'url' => 'url',
-            'like' => 'like',
-            'comment' => 'comment',
-            'created_at' => function($model){
-                return date('d-m-Y H:i:s',$this->created_at);
-            },
-            'updated_at' => function($model){
-                return date('d-m-Y H:i:s',$this->updated_at);
-            },
-            // field name is "name", its value is defined by a PHP callback
-            'data' => function ($model){
-                $array = (array)json_decode($model->data, true);
-                return $array;
-            },
-            //'data'=>'data',
-        ];
-    }*/
     public function attributeLabels()
     {
         return [
@@ -101,6 +116,7 @@ class Ticket extends ActiveRecord
             'title' => Yii::t('app','Тема'),
             'text' => Yii::t('app','Текст'),
             'files' => Yii::t('app','Файлы'),
+            'file' => Yii::t('app','Файлы'),
             'json' => Yii::t('app','Доп. данные'),
             'status' => Yii::t('app','Статус'),
             'callback' => Yii::t('app','Ответ'),
@@ -117,13 +133,16 @@ class Ticket extends ActiveRecord
     //     return true;
     // }
 
-    // public function beforeValidate(){
-    //     if(!is_array($this->cat_level) or !is_array($this->cat_id) ){
-    //         $group = Group::findOne($this->cat_id);
-    //         $this->cat_level = $group->level;
-    //     }
-    //     return true;
-    // }
+    public function beforeValidate(){
+        if(!is_array($this->cat_level) or !is_array($this->cat_id) ){
+            $group = Group::findOne($this->cat_id);
+            $this->cat_level = $group->level;
+        }
+        if($this->file){
+            $this->files = "/".$this->url."/".$this->file;
+        }
+        return true;
+    }
 
     // public function afterSave($insert)
     // {

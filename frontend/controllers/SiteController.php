@@ -79,22 +79,26 @@ class SiteController extends Controller
     public function actionCreate()
     {
         $model = new Ticket();
-        
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            
-            if ($model->sendEmail(Yii::$app->params['adminEmail'])) {
-                Yii::$app->session->setFlash('success', 'Thank you for contacting us. We will respond to you as soon as possible.');
-            } else {
-                Yii::$app->session->setFlash('error', 'There was an error sending email.');
-            }
+        if ($model->load(Yii::$app->request->post())) {
+            $model->file = UploadedFile::getInstance($model, 'file');
 
-            return $this->refresh();
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
+            if($model->file && $model->save()){
+                    $model->file->saveAs('uploads/' . $model->file->baseName . '.' . $model->file->extension);
+                
+                    if ($model->sendEmail(Yii::$app->params['adminEmail'])) {
+                        Yii::$app->session->setFlash('success', 'Thank you for contacting us. We will respond to you as soon as possible.');
+                    } else {
+                        Yii::$app->session->setFlash('error', 'There was an error sending email.');
+                    }
+                    return $this->refresh();
+                }
+                else {
+                    return $this->render('create', [
+                        'model' => $model,
+                    ]);
+                }
         }
-        return $this->render('create');
+        return $this->render('create',compact('model'));
     }
 
     public function actionPage($id)

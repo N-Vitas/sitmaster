@@ -58,6 +58,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="panel-body">
                   <h2><?= $model->title;?></h2>
 					<p><?= $model->text;?></p>
+					<?php if($model->files):?>
+					<img class="img-thumbnail"  src="<?= $model->files;?>">
+					<?php endif;?>
                 </div>
               </div>
              </div>
