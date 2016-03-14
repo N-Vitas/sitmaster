@@ -135,8 +135,10 @@ class Ticket extends ActiveRecord
 
     public function beforeValidate(){
         if(!is_array($this->cat_level) or !is_array($this->cat_id) ){
-            $group = Group::findOne($this->cat_id);
-            $this->cat_level = $group->level;
+            if($this->cat_id > 0){
+                $group = Group::findOne($this->cat_id);
+                $this->cat_level = $group->level;
+            }
         }
         if($this->file){
             $this->files = "/".$this->url."/".$this->file;

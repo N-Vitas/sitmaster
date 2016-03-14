@@ -4,6 +4,7 @@ namespace frontend\controllers;
 use Yii;
 use yii\web\UploadedFile;
 use common\models\LoginForm;
+use common\models\CommentTicket;
 use common\models\Ticket;
 use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
@@ -15,6 +16,7 @@ use yii\web\BadRequestHttpException;
 use frontend\components\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use yii\data\ActiveDataProvider;
 
 /**
  * Site controller
@@ -83,28 +85,48 @@ class SiteController extends Controller
             $model->file = UploadedFile::getInstance($model, 'file');
 
             if($model->file && $model->save()){
-                    $model->file->saveAs('uploads/' . $model->file->baseName . '.' . $model->file->extension);
-                
-                    if ($model->sendEmail(Yii::$app->params['adminEmail'])) {
-                        Yii::$app->session->setFlash('success', 'Thank you for contacting us. We will respond to you as soon as possible.');
-                    } else {
-                        Yii::$app->session->setFlash('error', 'There was an error sending email.');
-                    }
-                    return $this->refresh();
+                $model->file->saveAs('uploads/' . $model->file->baseName . '.' . $model->file->extension);
+            
+                if ($model->sendEmail(Yii::$app->params['adminEmail'])) {
+                    Yii::$app->session->setFlash('success', 'Thank you for contacting us. We will respond to you as soon as possible.');
+                } else {
+                    Yii::$app->session->setFlash('error', 'There was an error sending email.');
                 }
-                else {
-                    return $this->render('create', [
-                        'model' => $model,
-                    ]);
+                return $this->refresh();
+            }
+            else if($model->save()){
+                if ($model->sendEmail(Yii::$app->params['adminEmail'])) {
+                    Yii::$app->session->setFlash('success', 'Thank you for contacting us. We will respond to you as soon as possible.');
+                } else {
+                    Yii::$app->session->setFlash('error', 'There was an error sending email.');
                 }
+                return $this->refresh();
+            }else{
+                return $this->render('create', [
+                    'model' => $model,
+                ]);                
+            }
         }
         return $this->render('create',compact('model'));
     }
 
     public function actionPage($id)
     {
-        $model = Ticket::findOne((int) $id);
-        return $this->render('page',compact('model'));
+        $model = new CommentTicket();
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            Yii::$app->session->setFlash('success', 'Thank you for contacting us. We will respond to you as soon as possible.');
+            return $this->refresh();
+        }
+        $ticket = Ticket::findOne((int) $id);
+        $query = CommentTicket::find()->where(['ticket_id'=> $id]);
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+            'sort'=> ['defaultOrder' => ['created_at'=>SORT_ASC]]
+        ]);
+        return $this->render('page',compact('model','ticket','dataProvider'));
     }
 
     public function actionLogin()

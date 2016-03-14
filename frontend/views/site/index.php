@@ -116,7 +116,7 @@ $this->title = 'Заявки';
                 <?= ListView::widget([
                   'dataProvider' => $dataProvider,
                   'itemOptions' => ['class' => 'item'],
-                  'itemView' => 'list_item',
+                  'itemView' => 'list_ticket_item',
                   'layout' => "{items}\n{summary}\n{pager}",
                   'options' => [
                     'id' => 'listview'

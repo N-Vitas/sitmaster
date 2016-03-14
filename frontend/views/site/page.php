@@ -1,5 +1,7 @@
 <?php
 use yii\helpers\Html;
+use yii\widgets\ListView;
+use yii\widgets\ActiveForm;
 /* @var $this yii\web\View */
 $this->title = 'Заявка';
 $this->params['breadcrumbs'][] = $this->title;
@@ -10,15 +12,16 @@ $this->params['breadcrumbs'][] = $this->title;
 		<!-- Детали заявки -->
 		<div class="col-md-3">
 			<div class="md-card__title"><h2 class="mdl-card__title-text">Детали заявки</h2></div>
-			<div class="md-card__supporting-text"><i class="material-icons btn-sm">&#xE867;</i><?= $model->id;?></div>
-			<div class="md-card__supporting-text"><i class="material-icons btn-sm">&#xE853;</i><?= $model->getUserName();?></div>
-			<div class="md-card__supporting-text"><i class="material-icons btn-sm">&#xE85C;</i><?= $model->getStatusName();?></div>
-			<div class="md-card__supporting-text"><i class="material-icons btn-sm">&#xE84F;</i>Ресторан 2</div>
-			<div class="md-card__supporting-text"><i class="material-icons btn-sm">&#xE851;</i>Максим Атрешкевич</div>
-			<div class="md-card__supporting-text"><i class="material-icons btn-sm">&#xE925;</i>Нормальный</div>
-			<div class="md-card__supporting-text"><i class="material-icons btn-sm">&#xE916;</i>15-01-2016 21:15:57</div>
-			<div class="md-card__supporting-text"><i class="material-icons btn-sm">&#xE916;</i>15-01-2016 21:20:52</div>
-			<div class="md-card__supporting-text"><i class="material-icons btn-sm">&#xE916;</i>15-01-2016 21:20:52</div>
+			<div class="md-card__supporting-text"><i class="material-icons btn-sm">&#xE867;</i><?= $ticket->id;?></div>
+			<div class="md-card__supporting-text"><i class="material-icons btn-sm">&#xE853;</i><?= $ticket->getUserName();?></div>
+			<div class="md-card__supporting-text"><i class="material-icons btn-sm">&#xE85C;</i><?= $ticket->getStatusName();?></div>
+			<div class="md-card__supporting-text"><i class="material-icons btn-sm">&#xE84F;</i><?= $ticket->getGroupName();?></div>
+			<div class="md-card__supporting-text"><i class="material-icons btn-sm">&#xE851;</i><?= $ticket->getAgentName();?></div>
+			<div class="md-card__supporting-text"><i class="material-icons btn-sm">&#xE925;</i><?= $ticket->priorited;?></div>
+			<div class="md-card__supporting-text"><i class="material-icons btn-sm">&#xE916;</i>
+			<?= \Yii::$app->formatter->asDatetime($ticket->created_at,'dd MM Y H:i:s');?></div>
+			<!-- <div class="md-card__supporting-text"><i class="material-icons btn-sm">&#xE916;</i>15-01-2016 21:20:52</div>
+			<div class="md-card__supporting-text"><i class="material-icons btn-sm">&#xE916;</i>15-01-2016 21:20:52</div> -->
 		</div>
 		<!-- Переписка -->
 		<div class="col-md-9">
@@ -33,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
 				        <span class="icon-bar"></span>
 				        <span class="icon-bar"></span>
 				      </button>
-				      <a class="navbar-brand" href="#"><?= $model->getUserName();?></a>
+				      <a class="navbar-brand" href="#"><?= $ticket->getUserName();?></a>
 				    </div>
 
 				    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -54,79 +57,47 @@ $this->params['breadcrumbs'][] = $this->title;
 				    </div>
 				  </div>
 				</nav>
-              <div class="panel panel-<?= $model->getStatusColor();?>">
+              <div class="panel panel-<?= $ticket->getStatusColor();?>">
                 <div class="panel-body">
-                  <h2><?= $model->title;?></h2>
-					<p><?= $model->text;?></p>
-					<?php if($model->files):?>
-					<img class="img-thumbnail"  src="<?= $model->files;?>">
+                  <h2><?= $ticket->title;?></h2>
+					<p><?= $ticket->text;?></p>
+					<?php if($ticket->files):?>
+					<img class="img-thumbnail"  src="<?= $ticket->files;?>">
 					<?php endif;?>
                 </div>
               </div>
              </div>
             </div>
 
-            <div class="row">            
-        	 <div class="col-md-2"></div>
-        	 <div class="col-md-10">
-              <div class="panel panel-info">
-                <div class="panel-heading">
-                  <h3 class="panel-title">Максим Атрешкевич</h3>
-                </div>
-                <div class="panel-body">
-                  <blockquote>
-				    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
-				    <small>Someone famous in <cite title="Source Title">Source Title</cite></small>
-				  </blockquote>
-                </div>
-              </div>
-             </div>
-            </div>
 
-            <div class="row">
-              <div class="col-md-10">
-				<div class="panel panel-success">
-					<div class="panel-heading">
-				  		<h3 class="panel-title">Анна ивановна</h3>
-					</div>
-					<div class="panel-body">
-						<p>
-						  <small>Material Design for Bootstrap is a Bootstrap V3 compatible theme; it is an easy way to use the new Material Design guidelines by Google in your Bootstrap 3 based application. Just include the theme, after the Bootstrap CSS and include the JavaScript at the end of your document (just before the body tag), and everything will be converted to Material Design (Paper) style.
-
-					NOTE: This V3 compatible theme is still in development, it could be used on production websites but I can't guarantee compatibility with previous versions.</small>
-						</p>
-					</div>
-				</div>
-	          </div>
-              <div class="col-md-2"></div>
-            </div>
-
-            <div class="row">
-            	<div class="col-md-2"></div>
-            	<div class="col-md-10">
-            		<div class="panel panel-info">
-		                <div class="panel-heading">
-		                  <h3 class="panel-title">Максим Атрешкевич</h3>
-		                </div>
-		                <div class="panel-body">
-						    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
-						    <small>Someone famous in <cite title="Source Title">Source Title</cite></small>
-		                </div>
-		            </div>
-            	</div>              
-            </div>
+        	<?= ListView::widget([
+              'dataProvider' => $dataProvider,
+              'itemOptions' => ['class' => 'item'],
+              'itemView' => 'list_comment_item',
+              'layout' => "{items}\n{summary}\n{pager}",
+              'pager' => [
+                  'firstPageLabel' => 'Первая',
+                  'lastPageLabel' => 'Последняя',
+                  'nextPageLabel' => 'Следующий',
+                  'prevPageLabel' => 'Предыдущий',
+                  'maxButtonCount' => 10,
+                  'options' => ['class'=>"pagination pagination-sm"],
+              ],
+            ]); ?>
             <!-- Форма -->
             <div class="form-group label-floating">
+            <?php $form = ActiveForm::begin(); ?>
+            <?= $form->field($model, 'author_id')->hiddenInput(['value'=> \Yii::$app->user->id])->label(false); ?>
+            <?= $form->field($model, 'ticket_id')->hiddenInput(['value'=> $ticket->id])->label(false); ?>
 			  <div class="input-group">
-			    <label class="control-label" for="addon3a">Ответить</label>
-			    <input type="text" id="addon3a" class="form-control">
-			    <p class="help-block">The label is inside the <code>input-group</code> so that it is positioned properly as a placeholder.</p>
+			    <?= $form->field($model, 'text'); ?>
 			    <span class="input-group-btn">
-			      <button type="button" class="btn btn-fab btn-fab-mini">
+			      <button type="submit" class="btn btn-fab btn-fab-mini">
 			        <i class="material-icons">send</i>
 			      </button>
 			    </span>
 			  </div>
+			 <?php ActiveForm::end(); ?>
 			</div>
             <!-- Конец формы -->
 		</div>

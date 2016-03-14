@@ -35,11 +35,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             }
                         }
                     }
-                    if(count($category) > 1){
+                    if(count($category) > 0){
                         echo $form->field($model, 'cat_id')->listBox($category,['size'=>1]);
-                    }
-                    else{
-                        echo $form->field($model, 'cat_id')->hiddenInput(['value'=> $category[0]])->label(false);
                     }
                 ?>     
        
