@@ -2,6 +2,7 @@
 use yii\helpers\Html;
 use yii\widgets\ListView;
 use yii\widgets\ActiveForm;
+use yii\bootstrap\Modal;
 /* @var $this yii\web\View */
 $this->title = 'Заявка';
 $this->params['breadcrumbs'][] = $this->title;
@@ -38,15 +39,15 @@ $this->params['breadcrumbs'][] = $this->title;
 				      </button>
 				      <a class="navbar-brand" href="#"><?= $ticket->getUserName();?></a>
 				    </div>
-
+					<?php if(\Yii::$app->user->identity->role_id > 3):?>
 				    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				      <ul class="nav navbar-nav navbar-right">
 				        <li class="dropdown">
 				          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Действия <span class="caret"></span></a>
 				          <ul class="dropdown-menu" role="menu">
-					        <li><a href="#Изменить статус">Изменить статус</a></li>
-					        <li><a href="#Назначить">Назначить</a></li>
-					        <li><a href="#Закрыть">Закрыть</a></li>
+					        <li><a href="javascript::void()" id="activity-view-link">Изменить статус</a></li>
+					        <li><a href="/site/setagent/<?= $ticket->id;?>">Назначить</a></li>
+					        <li><a href="/site/cosed/<?= $ticket->id;?>">Закрыть</a></li>
 				            <li class="divider"></li>
 				            <li><a href="#">Separated link</a></li>
 				            <li class="divider"></li>
@@ -55,6 +56,7 @@ $this->params['breadcrumbs'][] = $this->title;
 				        </li>
 				      </ul>				      
 				    </div>
+					<?php endif;?>
 				  </div>
 				</nav>
               <div class="panel panel-<?= $ticket->getStatusColor();?>">
@@ -100,7 +102,27 @@ $this->params['breadcrumbs'][] = $this->title;
 			 <?php ActiveForm::end(); ?>
 			</div>
             <!-- Конец формы -->
+
 		</div>
 	</div>
 	</div>
+
+	<?
+		$array = [1=>"Открыта",2=>"В ожидании",3=>"Приостановленная",4=>"Решена"];
+		$data  = Html::beginForm(['site/statuschange', 'id' => $ticket->id], 'post', ['id' => 'change_status']);
+		$data .= '<div class="form-group">';		
+		$data .= Html::dropDownList('status', $ticket->status, $array,['class'=>'form-control']);
+		$data .= '</div>';
+		$data .= '<div class="btn-group" role="group">';
+		$data .= Html::submitButton('Сохранить', ['class' => 'btn btn-primary']);
+		$data .= Html::button('Отменить', ['class' => 'btn btn-primary','data-dismiss'=>'modal']);
+		$data .= '</div>';
+		$data .= Html::endForm();
+	?>
+	<?php Modal::begin([
+	    'id' => 'activity-modal',
+	    'header' => $data
+
+	]); ?>
+	<?php Modal::end(); ?>
 </div>

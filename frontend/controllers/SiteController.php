@@ -31,7 +31,7 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index','contact','about','page','logout', 'signup','create'],
+                'only' => ['index','contact','about','page','logout', 'signup','create','cosed'],
                 'rules' => [
                     [
                         'actions' => ['signup'],
@@ -39,7 +39,7 @@ class SiteController extends Controller
                         'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['index','contact','about','page','logout','create'],
+                        'actions' => ['index','contact','about','page','logout','create','cosed'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -76,6 +76,31 @@ class SiteController extends Controller
         $searchModel = new TicketSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         return $this->render('index',compact('dataProvider','searchModel'));
+    }
+
+    public function actionCosed($id){
+        if(Yii::$app->user->identity->role_id >3){
+            $model = Ticket::findOne($id);
+            $model->status = 4;
+            $model->save();
+        }
+        $this->redirect('/site/page/'.$id);
+    }
+    public function actionStatuschange($id){
+        if(Yii::$app->user->identity->role_id >3){
+            $model = Ticket::findOne($id);
+            $model->status = Yii::$app->request->post('status');
+            $model->save();
+        }
+        $this->redirect('/site/page/'.$id);
+    }
+    public function actionSetagent($id){
+        if(Yii::$app->user->identity->role_id >3){
+            $model = Ticket::findOne($id);
+            $model->agent_id = Yii::$app->user->id;
+            $model->save();
+        }
+        $this->redirect('/site/page/'.$id);
     }
     
     public function actionCreate()
@@ -134,7 +159,6 @@ class SiteController extends Controller
         if (!\Yii::$app->user->isGuest) {
             return $this->goHome();
         }
-
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             return $this->goBack();
