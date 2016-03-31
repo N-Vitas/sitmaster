@@ -9,3 +9,18 @@
 	cursor: pointer;
     color: #009688;
 }
+.list-group-item-text{
+	font-size: 16px !important;
+}
+.list-group .list-full-separator {
+    clear: both;
+    overflow: hidden;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.list-group .list-full-separator::before {
+    content: "";
+    width: 100%;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    float: right;
+}

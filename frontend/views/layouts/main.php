@@ -21,6 +21,7 @@ $this->beginContent('@frontend/views/layouts/structure.php') ?>
                 ['label' => 'Главная', 'url' => ['/site/index']],
                 ['label' => 'Создать заявку', 'url' => ['/site/create']],
                 ['label' => 'О сервисе', 'url' => ['/site/about']],
+                ['label' => 'Профиль', 'url' => ['/profile']],
                 ['label' => 'Обратная связь', 'url' => ['/site/contact']],
             ];
             if (Yii::$app->user->isGuest) {
