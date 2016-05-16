@@ -39,7 +39,7 @@ class Profile extends ActiveRecord
             [['user_id'], 'integer'],
             [['user_id'], 'required'],
             [['bio'], 'string'],
-            [['name','public_email','gravatar_email','gravatar_id','location','website'], 'string', 'max' => 255],
+            [['name','public_email','gravatar_email','gravatar_id','location','phone','website'], 'string', 'max' => 255],
         ];
     }
 
@@ -52,6 +52,7 @@ class Profile extends ActiveRecord
             'gravatar_email' => Yii::t('app','Дополнительный email'),
             'gravatar_id' => Yii::t('app','Аватар'),
             'location' => Yii::t('app','Адресс'),
+            'phone' => Yii::t('app','Адресс'),
             'website' => Yii::t('app','Сайт'),
             'bio' => Yii::t('app','О себе'),
         ];

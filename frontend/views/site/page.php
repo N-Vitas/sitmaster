@@ -107,7 +107,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	</div>
 	</div>
 
-	<?
+	<?php
 		$array = [1=>"Открыта",2=>"В ожидании",3=>"Приостановленная",4=>"Решена"];
 		$data  = Html::beginForm(['site/statuschange', 'id' => $ticket->id], 'post', ['id' => 'change_status']);
 		$data .= '<div class="form-group">';		
