@@ -11,7 +11,3 @@ function editProfile(model,name,data){
 function editRole(){
 	$('#role-activity-modal').modal();
 }
-$('.delete').click(function(e){
-	
-	$('#delete-modal').modal();
-});

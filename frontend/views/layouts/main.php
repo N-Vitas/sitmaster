@@ -25,7 +25,7 @@ $this->beginContent('@frontend/views/layouts/structure.php') ?>
                 ['label' => 'Обратная связь', 'url' => ['/site/contact']],
             ];
             if (Yii::$app->user->isGuest) {
-                $menuItems[] = ['label' => 'Регистрация', 'url' => ['/site/signup']];
+                // $menuItems[] = ['label' => 'Регистрация', 'url' => ['/site/signup']];
                 $menuItems[] = ['label' => 'Вход', 'url' => ['/site/login']];
             } else {
                 $menuItems[] = [

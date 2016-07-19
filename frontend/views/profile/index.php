@@ -99,7 +99,7 @@ $profile = $model->profile;
                   <?php endif;?>
                   <a href="javascript:void(0)"><i class="material-icons">assignment_ind</i></a>
                 </div>
-                <h4 class="list-group-item-heading">Должность</h4>
+                <h4 class="list-group-item-heading">Роль</h4>
                 <p class="list-group-item-text"><?= $model->getRoleName()?></p>
               </div>
             </div>
