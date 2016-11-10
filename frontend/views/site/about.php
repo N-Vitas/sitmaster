@@ -2,34 +2,35 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-$this->title = 'About';
+$this->title = 'Статистика';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="site-about">
-    <h1><?= Html::encode($this->title) ?></h1>
-    <? if($id!=0) echo $id;?>
-    <p>This is the About page. You may modify the following file to customize its content:</p>
-
-    <code><?= __FILE__ ?></code>
-
-
-    <h2>Exapmle material</h2>
-	<div class="form-group label-static">
-    <label for="i2" class="control-label">label-static</label>
-    <input type="email" class="form-control" id="i2" placeholder="placeholder attribute">
-    <p class="help-block">This is a hint as a <code>p.help-block.hint</code></p>
+<div class="site-index">
+  <div class="jumbotron">
+    <h2><?= Html::encode($this->title) ?></h2>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Ресторан</th>
+          <th>Открытых</th>
+          <th>В работе</th>
+          <th>Приостановленных</th>
+          <th>Решенных</th>
+          <th>Итого</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php for ($i=0; $i < count($statistic); $i++) { ?>
+        <tr>
+          <th scope="row"><?= $statistic[$i]['title']?></th>
+          <td class="success"><?= $statistic[$i]['open']?></td>
+          <td class="primary"><?= $statistic[$i]['wait']?></td>
+          <td class="danger"><?= $statistic[$i]['stop']?></td>
+          <td class="info"><?= $statistic[$i]['close']?></td>
+          <td><?= $statistic[$i]['total']?></td>
+        </tr>
+        <?php } ?>
+      </tbody>
+    </table>
   </div>
-
-  <div class="form-group label-floating">
-    <label for="i5" class="control-label">label-floating</label>
-    <input type="email" class="form-control" id="i5">
-    <span class="help-block">This is a hint as a <code>span.help-block.hint</code></span>
-  </div>
-
-  <div class="form-group label-placeholder">
-    <label for="i5p" class="control-label">label-placeholder</label>
-    <input type="email" class="form-control" id="i5p">
-    <span class="help-block">This is a hint as a <code>span.help-block.hint</code></span>
-  </div>
-
 </div>

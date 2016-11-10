@@ -66,43 +66,6 @@ class Ticket extends ActiveRecord
             // ['verifyCode', 'captcha'],
         ];
     }
-    // public function afterSave($insert)
-    // {
-    //     $basePath = \Yii::$app->baseUrl;        
-    //     // var_dump($basePath);die;
-    //     if(!is_dir($dirPath)){
-    //         mkdir($dirPath,0777,true);
-    //     }
-    //     @$exif = exif_read_data($this->file->tempName);
-    //        move_uploaded_file($this->file->tempName, $basePath."/".$this->file->tempName);
-    // }   
-    // public function beforeDelete()
-    // {
-    //     $basePath = \Yii::getAlias($this->url);
-    //     switch ($this->category){
-    //         case 'avatar':
-    //             $image = $basePath ? $basePath.'/avatar/'.$this->id.'.jpg':'/avatar/'.$this->id.'.jpg';                               
-    //             break;
-    //         case 'cover':
-    //             $image = $basePath ? $basePath.'/avatar/'.$this->parent_user_id.'_cover.jpg':'/avatar/'.$this->parent_user_id.'_cover.jpg';                               
-    //             break;
-    //         case 'carsfirst':
-    //             $image = $basePath ? $basePath.'/garage/landing/'.Images::getUrl($this->id,$this->type):'/garage/landing/'.Images::getUrl($this->id,$this->type);                               
-    //             break;
-    //         case 'carslast':
-    //             $image = $basePath ? $basePath.'/garage/custom/'.Images::getUrl($this->id,$this->type):'/garage/custom/'.Images::getUrl($this->id,$this->type);                               
-    //             break;
-            
-    //         default:
-    //             $image = $basePath ? $basePath.'/'.Images::getUrl($this->id,$this->type):Images::getUrl($this->id,$this->type);               
-    //             break;
-    //     }
-    //     if(file_exists($image))
-    //     {
-    //         unlink($image);
-    //     }
-    //     return true;
-    // }
 
     public function attributeLabels()
     {
@@ -126,12 +89,6 @@ class Ticket extends ActiveRecord
             'verifyCode' => Yii::t('app','Проверочный код'),
         ];
     }   
-    // public function beforeDelete()
-    // {
-    //     Newsline::deleteAll("post_id = ".$this->id);
-    //     Yii::$app->elasticsearch->delete('/ironpal/post/'.$this->id);
-    //     return true;
-    // }
 
     public function beforeValidate(){
         if(!is_array($this->cat_level) or !is_array($this->cat_id) ){
@@ -145,19 +102,6 @@ class Ticket extends ActiveRecord
         }
         return true;
     }
-
-    // public function afterSave($insert)
-    // {
-    //     $client = new \GearmanClient();
-    //     $client->addServer(/*"127.0.0.1",47330*/);
-    //     $client->setTimeout(29000);
-    //     $data = $this->attributes;
-    //     $data['insert'] = $insert;
-    //     $data = json_encode($data);
-    //     // Отправляем задачу и данные на Gearman и ждем выполнения
-    //     $client->doBackground('worker_new_post', $data);
-    //     return true;
-    // }
 
     public function sendEmail($email)
     {
@@ -190,7 +134,7 @@ class Ticket extends ActiveRecord
             case 1:
                 return "Открыта";
             case 2:
-                return "В ожидании";
+                return "В работе";
             case 3:
                 return "Приостановленная";
             case 4:

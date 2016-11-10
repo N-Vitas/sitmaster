@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # yii console command
 /yii
 
@@ -18,6 +17,7 @@ Thumbs.db
 
 # composer vendor dir
 /vendor
+/frontend/web/uploads/*
 
 # composer itself is not needed
 composer.phar
@@ -36,4 +36,4 @@ protected/runtime/*
 !protected/runtime/.gitignore
 protected/data/*.db
 themes/classic/views/
->>>>>>> 390b0999f91a7eedde89591148819cdade62f075
+*-local.php

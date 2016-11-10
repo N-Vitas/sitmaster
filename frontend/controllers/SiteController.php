@@ -6,6 +6,9 @@ use yii\web\UploadedFile;
 use common\models\LoginForm;
 use common\models\CommentTicket;
 use common\models\Ticket;
+use common\models\Group;
+use common\models\User;
+use common\models\UserGroup;
 use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
@@ -79,7 +82,7 @@ class SiteController extends Controller
                 } else {
                     Yii::$app->session->setFlash('error', 'There was an error sending email.');
                 }
-                return $this->refresh();
+                return Yii::$app->response->redirect(['site/index']); //$this->refresh();
             }else{
                 return $this->render('create', [
                     'model' => $model,
@@ -148,9 +151,87 @@ class SiteController extends Controller
         }
     }
 
-    public function actionAbout($id=0)
+    public function actionGroup(){
+      if(gettype(Yii::$app->request->post("create")) == 'string'
+          && Yii::$app->request->post("group") != ''
+        ){
+        $group = new Group();
+        $group->level = Yii::$app->request->post("level");
+        $group->title = Yii::$app->request->post("group");
+        if($group->save()){
+          Yii::$app->session->setFlash('success', 'Новая группа создана.');
+          $users = User::find()->where(['role_id'=>4])->all();
+          foreach($users as $user){
+            $userGroup = new UserGroup();
+            $userGroup->user_id = $user->id;
+            $userGroup->group_id = $group->id;
+            $userGroup->save();
+          }
+        }
+        else
+          Yii::$app->session->setFlash('error', 'Ошибка сохранения.');
+      }
+      return $this->render('group');
+    }
+    public function actionAbout()
     {
-        return $this->render('about',['id'=>$id]);
+      if(Yii::$app->user->identity->role_id < 3){
+        return $this->render('error',['message'=>"Страница не найдена.",'name'=>'Not Found (#404)']);
+      }
+      $levelUp = Group::find()->where(['level'=>0])->all();
+        foreach ($levelUp as $group) {
+          if(UserGroup::find()->where(['user_id'=>Yii::$app->user->identity->id,'group_id'=>$group->id])->count()){
+            $leveDown = Group::find()->where(['level'=>$group->id])->all();
+            $open  = Ticket::find()->where(['cat_id'=>$group->id,'status'=>1])->count();
+            $wait  = Ticket::find()->where(['cat_id'=>$group->id,'status'=>2])->count();
+            $stop  = Ticket::find()->where(['cat_id'=>$group->id,'status'=>3])->count();
+            $close = Ticket::find()->where(['cat_id'=>$group->id,'status'=>4])->count();
+            $total = Ticket::find()->where(['cat_id'=>$group->id])->count();
+            $statistic[] = [
+              'title' => $group->title,
+              'open'  => $open,
+              'wait'  => $wait,
+              'stop'  => $stop,
+              'close' => $close,
+              'total' => $total,
+            ]; 
+            foreach ($leveDown as $down) {
+              $l_open  = Ticket::find()->where(['cat_id'=>$down->id,'status'=>1])->count();
+              $l_wait  = Ticket::find()->where(['cat_id'=>$down->id,'status'=>2])->count();
+              $l_stop  = Ticket::find()->where(['cat_id'=>$down->id,'status'=>3])->count();
+              $l_close = Ticket::find()->where(['cat_id'=>$down->id,'status'=>4])->count();
+              $l_total = Ticket::find()->where(['cat_id'=>$down->id])->count();
+              $statistic[] = [
+                'title' => $down->title,
+                'open'  => $l_open,
+                'wait'  => $l_wait,
+                'stop'  => $l_stop,
+                'close' => $l_close,
+                'total' => $l_total,
+              ];             
+              $open  += $l_open;
+              $wait  += $l_wait;
+              $stop  += $l_stop;
+              $close += $l_close;
+              $total += $l_total;
+            } 
+            $statistic[] = [
+              'title' => '(Общее) '.$group->title,
+              'open'  => $open,
+              'wait'  => $wait,
+              'stop'  => $stop,
+              'close' => $close,
+              'total' => $total,
+            ]; 
+            unset($open);
+            unset($wait);
+            unset($stop);
+            unset($close);
+            unset($total);
+        }
+      }
+        // var_dump($statistic);die;
+        return $this->render('about',['statistic'=>$statistic]);
     }
 
     public function actionSignup()

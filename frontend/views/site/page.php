@@ -45,13 +45,11 @@ $this->params['breadcrumbs'][] = $this->title;
 				        <li class="dropdown">
 				          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Действия <span class="caret"></span></a>
 				          <ul class="dropdown-menu" role="menu">
-					        <li><a href="javascript::void()" id="activity-view-link">Изменить статус</a></li>
-					        <li><a href="/site/setagent/<?= $ticket->id;?>">Назначить</a></li>
-					        <li><a href="/site/cosed/<?= $ticket->id;?>">Закрыть</a></li>
+						        <li><a href="javascript::void()" id="activity-view-link">Изменить статус</a></li>
+						        <li class="divider"></li>
+						        <li><a href="/site/setagent/<?= $ticket->id;?>">Назначить</a></li>
 				            <li class="divider"></li>
-				            <li><a href="#">Separated link</a></li>
-				            <li class="divider"></li>
-				            <li><a href="#">One more separated link</a></li>
+						        <li><a href="/site/cosed/<?= $ticket->id;?>">Закрыть</a></li>
 				          </ul>
 				        </li>
 				      </ul>				      
@@ -107,8 +105,8 @@ $this->params['breadcrumbs'][] = $this->title;
 	</div>
 	</div>
 
-	<?
-		$array = [1=>"Открыта",2=>"В ожидании",3=>"Приостановленная",4=>"Решена"];
+	<?php
+		$array = [1=>"Открыта",2=>"В работе",3=>"Приостановленная",4=>"Решена"];
 		$data  = Html::beginForm(['site/statuschange', 'id' => $ticket->id], 'post', ['id' => 'change_status']);
 		$data .= '<div class="form-group">';		
 		$data .= Html::dropDownList('status', $ticket->status, $array,['class'=>'form-control']);

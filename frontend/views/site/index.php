@@ -10,9 +10,6 @@ $this->title = 'Заявки';
 ?>
 <div class="site-index">
   <div class="jumbotron">
-    <?php Pjax::begin()#[
-      // 'id'=>'ticket-pjax',
-    #]); ?> 
       <div class="row">
           <!-- Форма фильтра -->
           <div class="col-lg-3">
@@ -37,24 +34,28 @@ $this->title = 'Заявки';
               </div>
               <p class="lead">Статус.</p>       
                   <div class="checkbox">
-                  <label class="checkbox-inline">
-                    <input type="checkbox" name="TicketSearch[status][]" value="1" <?=in_array(1, (array)$searchModel->status)?'checked':''?>/> Открыта
-                  </label>
+                    <span class="label label-success">&nbsp;</span>
+                    <label class="checkbox-inline">
+                      <input type="checkbox" name="TicketSearch[status][]" value="1" <?=in_array(1, (array)$searchModel->status)?'checked':''?>/> Открыта
+                    </label>
                   </div>
                   <div class="checkbox">
-                  <label class="checkbox-inline">
-                      <input type="checkbox" name="TicketSearch[status][]" value="2" <?=in_array(2, (array)$searchModel->status)?'checked':''?>/> В ожидании
-                  </label>
+                    <span class="label label-primary">&nbsp;</span>
+                    <label class="checkbox-inline">
+                      <input type="checkbox" name="TicketSearch[status][]" value="2" <?=in_array(2, (array)$searchModel->status)?'checked':''?>/> В работе
+                    </label>
                   </div>
                   <div class="checkbox">
-                  <label class="checkbox-inline">
+                    <span class="label label-danger">&nbsp;</span>
+                    <label class="checkbox-inline">
                       <input type="checkbox" name="TicketSearch[status][]" value="3" <?=in_array(3, (array)$searchModel->status)?'checked':''?>/> Приостановлена
-                  </label> 
+                    </label> 
                   </div>
                   <div class="checkbox">
-                  <label class="checkbox-inline">
+                    <span class="label label-info">&nbsp;</span>
+                    <label class="checkbox-inline">
                       <input type="checkbox" name="TicketSearch[status][]" value="4" <?=in_array(4, (array)$searchModel->status)?'checked':''?>/> Решена
-                  </label> 
+                    </label> 
                   </div>
 
               <?php if($user->role_id > 3):?>
@@ -133,6 +134,5 @@ $this->title = 'Заявки';
               </div>
           </div> <!-- Конец списка -->
       </div>
-    <?php Pjax::end(); ?>
   </div>
 </div>

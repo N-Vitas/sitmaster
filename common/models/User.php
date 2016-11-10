@@ -153,12 +153,6 @@ class User extends BaseUser
 
         return null;
     }
-    
-    public function beforeDelete()
-    {
-        // Yii::$app->elasticsearch->delete('/ironpal/user/'.$this->id); 
-        return true;
-    }
 
     public function reindexElastica()
     {
@@ -179,7 +173,7 @@ class User extends BaseUser
         Yii::$app->elasticsearch->put('/ironpal/user/'.$this->id,[],json_encode($data));
     }
 
- public function beforeSave($insert)
+    public function beforeSave($insert)
     {
         if ($insert) {
             $this->setAttribute('auth_key', \Yii::$app->security->generateRandomString());
@@ -194,11 +188,7 @@ class User extends BaseUser
 
         return true;
     }
-    public function afterSave($insert)
-    {
-        // $this->reindexElastica();
-        return true;
-    }
+    
     public function getRoleName()
     {
         $role = \common\models\Role::findOne($this->role_id);

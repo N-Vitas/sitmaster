@@ -11,7 +11,7 @@ $this->beginContent('@frontend/views/layouts/structure.php') ?>
 <div class="wrap">
         <?php
             NavBar::begin([
-                'brandLabel' => 'My Company',
+                'brandLabel' => 'Sitmaster.kz',
                 'brandUrl' => Yii::$app->homeUrl,
                 'options' => [
                     'class' => 'navbar navbar-inverse',///*-fixed-top*/
@@ -20,12 +20,17 @@ $this->beginContent('@frontend/views/layouts/structure.php') ?>
             $menuItems = [
                 ['label' => 'Главная', 'url' => ['/site/index']],
                 ['label' => 'Создать заявку', 'url' => ['/site/create']],
-                ['label' => 'О сервисе', 'url' => ['/site/about']],
                 ['label' => 'Профиль', 'url' => ['/profile']],
                 ['label' => 'Обратная связь', 'url' => ['/site/contact']],
             ];
+            if(Yii::$app->user->identity->role_id > 2){
+                $menuItems[] = ['label' => 'Статистика', 'url' => ['/site/about']];
+            }
+            if(Yii::$app->user->identity->role_id > 3){
+                $menuItems[] = ['label' => 'Группы', 'url' => ['/site/group']];
+            }            
             if (Yii::$app->user->isGuest) {
-                $menuItems[] = ['label' => 'Регистрация', 'url' => ['/site/signup']];
+                // $menuItems[] = ['label' => 'Регистрация', 'url' => ['/site/signup']];
                 $menuItems[] = ['label' => 'Вход', 'url' => ['/site/login']];
             } else {
                 $menuItems[] = [
