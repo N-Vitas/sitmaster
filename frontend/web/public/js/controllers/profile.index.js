@@ -14,6 +14,7 @@ function editRole(){
 $('.delete').click(function(e){
 	
 	$('#delete-modal').modal();
+<<<<<<< HEAD
 });
 
 

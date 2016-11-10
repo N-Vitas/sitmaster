@@ -3,7 +3,6 @@ namespace common\models;
 
 use Yii;
 use dektrium\user\models\User as BaseUser;
-use \common\models\Post;
 use \common\models\Profile;
 use \common\models\Token;
 use \common\models\UserGroup;
@@ -63,12 +62,12 @@ class User extends BaseUser
     }
     public static function findByUsername($username)
     {
-        return static::findOne(['username' => $username]);
+        return static::findOne(['username' => $username,'flags'=>0]);
     }
 
     public static function findByEmail($email)
     {
-        return static::findOne(['email' => $email]);
+        return static::findOne(['email' => $email,'flags'=>0]);
     }
     public static function findByPasswordResetToken($token)
     {
@@ -116,11 +115,6 @@ class User extends BaseUser
     }
     public function removePasswordResetToken(){
         $this->password_reset_token = 0;
-    }
-    //тест связи пользователя с постом.
-    public function getPosts()
-    {
-        return $this->hasMany(Post::className(), ['parent_user_id' => 'id']);   
     }
 
 
@@ -209,5 +203,15 @@ class User extends BaseUser
         }
         else
             return false;
+    }
+    
+    public function attributeLabels()
+    {
+        return [
+            'id' => 'Порядоковый номер',
+            'created_at' => 'Дата создания',
+            'username' => 'Логин',
+            'email' => 'Email',
+        ];
     }
 }
