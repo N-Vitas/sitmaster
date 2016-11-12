@@ -4,6 +4,7 @@ return [
     'language'=>'ru',
     'sourceLanguage'=>'en',
     'bootstrap' => ['log'],
+    'name' => 'support.sitmaster.kz',
     'components' => [
         'authManager' => [
             'class' => 'yii\rbac\DbManager',

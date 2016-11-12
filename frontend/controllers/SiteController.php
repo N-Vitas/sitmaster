@@ -47,7 +47,9 @@ class SiteController extends Controller
         if(Yii::$app->user->identity->role_id >3){
             $model = Ticket::findOne($id);
             $model->status = Yii::$app->request->post('status');
-            $model->save();
+            if($model->save()){
+                $this->sendChange($model,'change-status');
+            }
         }
         $this->redirect('/site/page/'.$id);
     }
@@ -58,6 +60,18 @@ class SiteController extends Controller
             $model->save();
         }
         $this->redirect('/site/page/'.$id);
+    }
+
+    private function sendChange($model,$template){
+        $author = User::findOne($model->user_id);
+        if($author){                   
+            return Yii::$app->mailer->compose(['html' => $template.'-html', 'text' => $template.'-text'], ['model' => $model,'author'=> $author])
+            ->setTo($author->email)
+            ->setFrom([\Yii::$app->params['supportEmail'] => \Yii::$app->name.' robot'])
+            ->setSubject('Изменения в заявке № '.$model->id)
+            ->send();
+        }
+        return false;
     }
     
     public function actionCreate()
@@ -70,17 +84,17 @@ class SiteController extends Controller
                 $model->file->saveAs('uploads/' . $model->file->baseName . '.' . $model->file->extension);
             
                 if ($model->sendEmail(Yii::$app->params['adminEmail'])) {
-                    Yii::$app->session->setFlash('success', 'Thank you for contacting us. We will respond to you as soon as possible.');
+                    Yii::$app->session->setFlash('success', 'Заявка успешно создана. Благодарим Вас за использование нашего сервиса.');
                 } else {
-                    Yii::$app->session->setFlash('error', 'There was an error sending email.');
+                    Yii::$app->session->setFlash('error', 'Произошла ошибка отправки письма.');
                 }
                 return $this->refresh();
             }
             else if($model->save()){
                 if ($model->sendEmail(Yii::$app->params['adminEmail'])) {
-                    Yii::$app->session->setFlash('success', 'Thank you for contacting us. We will respond to you as soon as possible.');
+                    Yii::$app->session->setFlash('success', 'Заявка успешно создана. Благодарим Вас за использование нашего сервиса.');
                 } else {
-                    Yii::$app->session->setFlash('error', 'There was an error sending email.');
+                    Yii::$app->session->setFlash('error', 'Произошла ошибка отправки письма.');
                 }
                 return Yii::$app->response->redirect(['site/index']); //$this->refresh();
             }else{

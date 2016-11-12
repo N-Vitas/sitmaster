@@ -25,8 +25,8 @@ use yii\web\UploadedFile;
  */
 class Ticket extends ActiveRecord
 {
-    private $email = 'test@test.com';
-    private $name = 'contra';    
+    private $email = 'nikonov.vitas@gmail.com';
+    private $name = 'support.sitmaster.kz';    
     public $file;
     private $path;
     public $url = 'uploads';
@@ -105,9 +105,9 @@ class Ticket extends ActiveRecord
 
     public function sendEmail($email)
     {
-        return Yii::$app->mailer->compose()
+        return Yii::$app->mailer->compose(/*['html' => 'passwordResetToken-html', 'text' => 'passwordResetToken-text'], ['user' => $user]*/)
             ->setTo($email)
-            ->setFrom([$this->email => $this->name])
+            ->setFrom([\Yii::$app->params['supportEmail'] => $this->name])
             ->setSubject($this->title)
             ->setTextBody($this->text)
             ->send();
