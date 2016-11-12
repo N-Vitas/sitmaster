@@ -44,7 +44,7 @@ class User extends BaseUser
                 ['email', 'required', 'on' => ['register', 'connect', 'create', 'update']],
                 ['email', 'email'],
                 ['email', 'string', 'max' => 255],
-                ['email', 'unique'],
+                // ['email', 'unique'],
                 ['email', 'trim'],
 
                 ['password', 'required', 'on' => ['register']],

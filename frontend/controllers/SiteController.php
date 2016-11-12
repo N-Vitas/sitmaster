@@ -39,7 +39,9 @@ class SiteController extends Controller
         if(Yii::$app->user->identity->role_id >3){
             $model = Ticket::findOne($id);
             $model->status = 4;
-            $model->save();
+            if($model->save()){
+                $this->sendChange($model,'change-status');
+            }
         }
         $this->redirect('/site/page/'.$id);
     }
@@ -57,7 +59,9 @@ class SiteController extends Controller
         if(Yii::$app->user->identity->role_id >3){
             $model = Ticket::findOne($id);
             $model->agent_id = Yii::$app->user->id;
-            $model->save();
+            if($model->save()){
+                $this->sendChange($model,'change-agent');
+            }
         }
         $this->redirect('/site/page/'.$id);
     }

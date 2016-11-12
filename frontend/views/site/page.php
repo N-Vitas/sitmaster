@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			<div class="md-card__supporting-text"><i class="material-icons btn-sm">&#xE851;</i><?= $ticket->getAgentName();?></div>
 			<div class="md-card__supporting-text"><i class="material-icons btn-sm">&#xE925;</i><?= $ticket->priorited;?></div>
 			<div class="md-card__supporting-text"><i class="material-icons btn-sm">&#xE916;</i>
-			<?= \Yii::$app->formatter->asDatetime($ticket->created_at,'dd MM Y H:i:s');?></div>
+			<?= date('d m Y H:i:s',$ticket->created_at);?></div>
 			<!-- <div class="md-card__supporting-text"><i class="material-icons btn-sm">&#xE916;</i>15-01-2016 21:20:52</div>
 			<div class="md-card__supporting-text"><i class="material-icons btn-sm">&#xE916;</i>15-01-2016 21:20:52</div> -->
 		</div>
