@@ -117,7 +117,6 @@ class User extends BaseUser
         $this->password_reset_token = 0;
     }
 
-
     public static function getToken($token, $type = null)
     {
         return Token::findOne(['code'=>$token]);
@@ -125,12 +124,7 @@ class User extends BaseUser
 
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        $tokenModel = self::getToken($token,$type);
-        if($tokenModel && !$tokenModel->getIsExpired()){
-            return self::findOne(['id'=>$tokenModel->user_id]);
-        }
-
-        return null;
+        return static::findOne(['auth_key' => $token,'flags'=>0]);
     }
 
     public function generateToken($type=false)

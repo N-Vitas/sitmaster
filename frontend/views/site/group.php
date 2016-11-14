@@ -8,6 +8,7 @@ $this->title = 'Управление групп';
 $this->params['breadcrumbs'][] = $this->title;
 $upgroup = Group::find()->where(['level'=>0])->all();
 $array[0] = "Новая группа";
+$token = \Yii::$app->user->identity->auth_key;
 ?>
 <div class="site-index">
   <div class="jumbotron">
@@ -26,9 +27,9 @@ $array[0] = "Новая группа";
               </a>
             </div>
             <div class="col-md-2">
-              <a class="pull-right" onClick="deleteGroup('<?= $value->title?>','<?= $value->id?>')" href="javascript:void(0)"><i class="material-icons">delete</i></a>
-              <a class="pull-right" onClick="changeGroup('<?= $value->title?>','<?= $value->id?>')" href="javascript:void(0)"><i class="material-icons">mode_edit</i></a>
-              <a class="pull-right" onClick="getUsers(<?= $value->id?>)" href="javascript:void(0)"><i class="material-icons">assignment_ind</i></a>
+              <a class="pull-right" onClick="deleteGroup('<?= $value->title?>','<?= $value->id?>','<?= $token?>')" href="javascript:void(0)"><i class="material-icons">delete</i></a>
+              <a class="pull-right" onClick="changeGroup('<?= $value->title?>','<?= $value->id?>','<?= $token?>')" href="javascript:void(0)"><i class="material-icons">mode_edit</i></a>
+              <a class="pull-right" onClick="getUsers(<?= $value->id?>,'<?= $token?>')" href="javascript:void(0)"><i class="material-icons">assignment_ind</i></a>
             </div>
           </div>
         </div>
@@ -41,9 +42,9 @@ $array[0] = "Новая группа";
                   <div class="row">
                     <div class="col-md-10"><a class="accordion-toggle"><?=$group->title?></a></div>
                     <div class="col-md-2">
-                      <a class="pull-right" onClick="deleteGroup('<?= $group->title?>','<?= $group->id?>')" href="javascript:void(0)"><i class="material-icons">delete</i></a>
-                      <a class="pull-right" onClick="changeGroup('<?= $group->title?>','<?= $group->id?>')" href="javascript:void(0)"><i class="material-icons">mode_edit</i></a>
-                      <a class="pull-right" onClick="getUsers(<?= $group->id?>)" href="javascript:void(0)"><i class="material-icons">assignment_ind</i></a>
+                      <a class="pull-right" onClick="deleteGroup('<?= $group->title?>','<?= $group->id?>','<?= $token?>')" href="javascript:void(0)"><i class="material-icons">delete</i></a>
+                      <a class="pull-right" onClick="changeGroup('<?= $group->title?>','<?= $group->id?>','<?= $token?>')" href="javascript:void(0)"><i class="material-icons">mode_edit</i></a>
+                      <a class="pull-right" onClick="getUsers(<?= $group->id?>,'<?= $token?>')" href="javascript:void(0)"><i class="material-icons">assignment_ind</i></a>
                     </div>
                   </div>
                 </div>

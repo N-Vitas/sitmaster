@@ -28,9 +28,9 @@ class AppAsset extends AssetBundle
     public $js = [
         'js/material.min.js',
         'js/ripples.min.js',
-        'js/react.min.js',
-        'js/react-dom.min.js',
-        'https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.24/browser.min.js',
+        // 'js/react.min.js',
+        // 'js/react-dom.min.js',
+        // 'https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.24/browser.min.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',

@@ -1,28 +1,34 @@
 function createGroup(){
 	$('#createGroup-modal').modal();
 }
-function getUsers(id){
+function getUsers(id,token){
 	$('#userGroup-modal').modal()
 	$.ajax({
 		url:'/api/get-userlist-group/'+id,
 		dataType:'json',
+		headers:{
+			'X-Key':token,
+		}
 	})
 	.done(function(response) {			
 		renderUsers(response);  
 	})
 }
 
-function changeGroup(title,id){
+function changeGroup(title,id,token){
 	$('#changeGroup-modal').modal();
-	renderGroup(title,id);
+	renderGroup(title,id,token);
 }
 
-function deleteGroup(title,id){
+function deleteGroup(title,id,token){
 	$('#deleteGroup-modal').modal();
 	$('#warning').html('Вы действительно хотите удалить группу <span class"text-danger">'+title+'</span>?')
 	$('#sub_delete').click(function(){
 		$.ajax({
-				url:'/api/delete-group/'+id
+				url:'/api/delete-group/'+id,
+				headers:{
+					'X-Key':token,
+				}
 			})
 			.done(function(res) {
 				if(res.result)
@@ -54,7 +60,7 @@ function renderUsers(response){
 	$('#container').html(html);
 }
 
-function renderGroup(title,id){
+function renderGroup(title,id,token){
 	var html = '<div class="form-group">';
 	html += '<H3>Редактирование группы</H3>';
 	html += '</div>';
@@ -73,6 +79,9 @@ function renderGroup(title,id){
 			$.ajax({
 				url:'/api/change-group/'+id,
 				method:'post',
+				headers:{
+					'X-Key':token,
+				},
 				data:{title:value}
 			})
 			.done(function(res) {

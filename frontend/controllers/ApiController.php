@@ -16,26 +16,52 @@ use yii\helpers\ArrayHelper;
 /**
  * Site controller
  */
-class ApiController extends Controller
+class ApiController extends \yii\web\Controller
 {
 	public $layout = 'api';
 
+  public function behaviors()
+  {
+      $behaviors = parent::behaviors();
+      $behaviors['authenticator'] = [
+          'class' => 'frontend\components\HttpHeaderAuth',
+      ];
+      $behaviors['corsFilter'] = [
+          'class' => \yii\filters\Cors::className(),
+          'cors' => [
+              'Origin' => ['*'],
+          ],
+
+      ];
+      return $behaviors;
+  }
+
+  public function actions()
+  {
+      return [
+        'error' => [
+          'class' => 'yii\web\ErrorAction',
+        ]
+      ];
+  }
+
+  public function init(){
+    Yii::$app->response->format = Response::FORMAT_JSON; 
+  }
+
   public function actionIndex()
   {
-		Yii::$app->response->format = Response::FORMAT_XML;
-    $item = ['sdfsdf'=>'sdf','sfffffs'=>'fssssssdf'];
+    $item = ['title'=>'API Для работы с приложениями','author'=>'Никонов Виталий'];
     return $item;
   }
 
   public function actionGetUsersGroup()
   {
-		Yii::$app->response->format = Response::FORMAT_JSON;
     return Group::find()->where(['!=','level',0])->asArray()->all();
   }
 
   public function actionGetUserlistGroup($id)
   {
-    Yii::$app->response->format = Response::FORMAT_JSON;
     $list = UserGroup::find()->where(['group_id'=>$id])->orderBy(['user_id' => SORT_ASC])->asArray()->all();
     if(count($list)){
       for($i=0;$i<count($list);$i++) {
@@ -51,7 +77,6 @@ class ApiController extends Controller
 
   public function actionGetAllGroup()
   {
-		Yii::$app->response->format = Response::FORMAT_JSON;
 		$groups = Group::find()->where(['level' => 0])->orderBy(['id' => SORT_ASC])->asArray()->all();		
 		for($i = 0; $i < count($groups);$i++) {
 			$groups[$i]['children'] = Group::find()->where(['level' => $groups[$i]['id']])->orderBy(['id' => SORT_ASC])->asArray()->all();
@@ -60,7 +85,6 @@ class ApiController extends Controller
   }
 
   public function actionChangeGroup($id){
-    Yii::$app->response->format = Response::FORMAT_JSON;
     if(Yii::$app->request->post('title')){
       $group = Group::find()->where(['id'=>$id])->one();
       $group->title = Yii::$app->request->post('title');
@@ -69,11 +93,10 @@ class ApiController extends Controller
       else
         return ['result'=>false];
     }
-    return ['result'=>false];
+    return ['result'=>false,'error'=>'Not params title'];
   }
 
   public function actionDeleteGroup($id){
-    Yii::$app->response->format = Response::FORMAT_JSON;
     if(Group::find()->where(['level'=>$id])->count() > 0){
       return ['result'=>false];
     }else{
