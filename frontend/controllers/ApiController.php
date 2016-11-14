@@ -20,11 +20,17 @@ class ApiController extends \yii\web\Controller
 {
 	public $layout = 'api';
 
+  //  public function beforeAction($action) {
+  //     $this->enableCsrfValidation = ($action->id !== "login"); 
+  //     return parent::beforeAction($action);
+  // }
+
   public function behaviors()
   {
       $behaviors = parent::behaviors();
       $behaviors['authenticator'] = [
           'class' => 'frontend\components\HttpHeaderAuth',
+          'except' => ['index'],
       ];
       $behaviors['corsFilter'] = [
           'class' => \yii\filters\Cors::className(),
@@ -52,6 +58,12 @@ class ApiController extends \yii\web\Controller
   public function actionIndex()
   {
     $item = ['title'=>'API Для работы с приложениями','author'=>'Никонов Виталий'];
+    return $item;
+  }
+
+  public function actionLogin()
+  {
+    $item = ['title'=>Yii::$app->request->post('title'),'author'=>'Никонов Виталий'];
     return $item;
   }
 

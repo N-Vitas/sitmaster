@@ -21,5 +21,4 @@ class HttpHeaderAuth extends AuthMethod
 
         return null;
     }
-
 }
