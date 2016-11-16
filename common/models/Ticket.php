@@ -65,7 +65,7 @@ class Ticket extends ActiveRecord
     {
         return [
             [['user_id', 'agent_id', 'created_at','cat_level', 'cat_id', 'updated_at', 'closed_at', 'status'], 'integer'],
-            [['title','user_id','text','priorited'], 'required'],
+            [['title','user_id','text','priorited','cat_id'], 'required'],
             [['text', 'json','files','callback'], 'string'],
             [['title', 'priorited'], 'string', 'max' => 255],
             [['file'], 'file', 'extensions' => 'gif, jpg, png, jpeg','maxSize' => 15048576],
