@@ -8,6 +8,7 @@ use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 use \common\models\Group;
 use yii\web\UploadedFile;
+use \common\models\Profile;
 
 /**
  * User model
@@ -49,6 +50,26 @@ class CommentTicket extends ActiveRecord
 
     }
 
+    public function fields()
+    {
+        return [
+            'id',
+            'author_id',
+            'ticket_id',
+            'text',
+            'status',
+            'created_at',
+            'author'=>function($model){
+                return array_merge([
+                    'username' => $model->user->username,
+                    'name' => $model->profile->name,
+                    'location' => $model->profile->location,
+                    'phone' => $model->profile->phone
+                ]);
+            }
+        ];
+    }
+    
     public function rules()
     {
         return [
@@ -69,6 +90,16 @@ class CommentTicket extends ActiveRecord
             'created_at' => Yii::t('app','Дата создания'),
         ];
     } 
+
+    public function getProfile()
+    {
+        return $this->hasOne(Profile::className(),['user_id'=>'author_id']);
+    }
+    public function getUser()
+    {
+        return $this->hasOne(User::className(),['id'=>'author_id']);
+    }
+
     public function getAuthorName(){
         $user = User::findOne($this->author_id);
         if($user)

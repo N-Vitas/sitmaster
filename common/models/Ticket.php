@@ -30,6 +30,12 @@ class Ticket extends ActiveRecord
     public $file;
     private $path;
     public $url = 'uploads';
+    public static $statusNames = [
+        1 =>"Открыта",
+        2 => "В работе",
+        3 => "Приостановленная",
+        4 => "Решена",
+    ];
     public static function tableName()
     {
         return 'ticket';

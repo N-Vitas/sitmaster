@@ -56,5 +56,5 @@ class Profile extends ActiveRecord
             'website' => Yii::t('app','Сайт'),
             'bio' => Yii::t('app','О себе'),
         ];
-    }    
+    } 
 }
