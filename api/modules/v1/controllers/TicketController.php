@@ -24,6 +24,7 @@ class TicketController extends Controller
       case 1:
         if($group){
           foreach ($group as $item) {
+            var_dump($item);die;
             $query = Ticket::find()->where(['cat_id' => $item->id]);                 
           }
         }else{
@@ -62,13 +63,10 @@ class TicketController extends Controller
         break;           
       default:
         $query = Ticket::find();
-        $items = Group::find()->where(['!=','level',0])->all();
         break;
   	}
 	  $result['ticket'] = $query->all();  
 	  $result['group'] = $group;
-	  isset($items)?$result['childGroup'] = $items:$result['childGroup'] = false;	
-	  $result['statusNames'] = Ticket::$statusNames;
 	  return $result;
   }
 
@@ -95,6 +93,7 @@ class TicketController extends Controller
   }
 
   public function actionCreate(){
+    // var_dump($_POST,$_FILES);die;
   	$model = new Ticket(['user_id'=>\Yii::$app->user->id]);
     if ($model->load(Yii::$app->request->post())) {
       $model->file = UploadedFile::getInstance($model, 'file');

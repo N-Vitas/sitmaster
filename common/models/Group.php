@@ -20,6 +20,18 @@ class Group extends ActiveRecord
         return 'Группа';
     }
 
+    public function fields()
+    {
+        return [
+            'id',
+            'level',
+            'title',
+            'childGroup'=>function($model){
+                return  self::find()->where(['level'=>$model->id])->all();
+            }
+        ];
+    }
+
     public function rules()
     {
         return [

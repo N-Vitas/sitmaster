@@ -11,13 +11,9 @@ function editProfile(model,name,data){
 function editRole(){
 	$('#role-activity-modal').modal();
 }
-$('.delete').click(function(e){
-	
+$('.delete').click(function(e){	
 	$('#delete-modal').modal();
-<<<<<<< HEAD
 });
-
-
 // Это у нас выпадающий список
 function editSimpleGroup(){
 	$('#group-activity-modal').modal();

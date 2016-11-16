@@ -28,7 +28,7 @@ class Controller extends BaseController
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index','contact','about','page','logout', 'signup','create','cosed'],
+                'only' => ['index','contact','about','page','logout', 'signup','create','cosed','group','setagent','statuschange'],
                 'rules' => [
                     [
                         'actions' => ['signup'],
@@ -36,7 +36,7 @@ class Controller extends BaseController
                         'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['index','contact','about','page','logout','create','cosed'],
+                        'actions' => ['index','contact','about','page','logout','create','cosed','group','setagent','statuschange'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],

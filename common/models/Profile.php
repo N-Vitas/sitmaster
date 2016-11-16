@@ -6,6 +6,7 @@ use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
+use \common\models\User;
 
 /**
  * User model
@@ -57,4 +58,8 @@ class Profile extends ActiveRecord
             'bio' => Yii::t('app','О себе'),
         ];
     } 
+
+    public function getUser(){
+        return $this->hasOne(User::className(),['id'=>'user_id']);
+    }
 }
