@@ -24,7 +24,6 @@ class TicketController extends Controller
       case 1:
         if($group){
           foreach ($group as $item) {
-            var_dump($item);die;
             $query = Ticket::find()->where(['cat_id' => $item->id]);                 
           }
         }else{

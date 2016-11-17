@@ -1,7 +1,7 @@
 <?php
 namespace frontend\models;
 
-use common\models\User;
+use common\models\Users;
 use common\models\Profile;
 use common\models\UserGroup;
 use yii\base\Model;
@@ -63,7 +63,7 @@ class SignupForm extends Model
     public function signup()
     {
       if ($this->validate()) {
-        $user = new User();
+        $user = new Users();
         $user->username = $this->username;
         $user->email = $this->email;
         $user->created_at = time();
@@ -72,7 +72,9 @@ class SignupForm extends Model
         $user->role_id = $this->role_id;
         $user->generateAuthKey();
         if ($user->save()) {
-          $profile = new Profile();
+          $profile = Profile::find()->where(['user_id'=>$user->id])->one();
+          if(!$profile)
+            $profile = new Profile();
           $profile->user_id = $user->id;
           $profile->public_email = $this->email;
           $profile->gravatar_email = $this->email;
