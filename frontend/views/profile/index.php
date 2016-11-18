@@ -7,6 +7,7 @@ use common\models\Role;
 $this->title = 'Мой профиль';
 $this->params['breadcrumbs'][] = $this->title;
 $profile = $model->profile;
+$token = $model->auth_key;
 ?>
 <div class="profile-index">
   <div class="jumbotron">    
@@ -80,9 +81,9 @@ $profile = $model->profile;
                 <div class="least-content">
                   <?php if(Yii::$app->user->identity->role_id > 3):?> 
                     <?php if($model->role_id > 2):?>                 
-                    <a class="activity-view-link" onClick="editGustomGroup()" href="javascript:void(0)"><i class="material-icons">mode_edit</i></a>
+                    <a class="activity-view-link" onClick="editGustomGroup('<?= $token?>')" href="javascript:void(0)"><i class="material-icons">mode_edit</i></a>
                     <?php else:?>                
-                    <a class="activity-view-link" onClick="editSimpleGroup()" href="javascript:void(0)"><i class="material-icons">mode_edit</i></a>
+                    <a class="activity-view-link" onClick="editSimpleGroup('<?= $token?>')" href="javascript:void(0)"><i class="material-icons">mode_edit</i></a>
                     <?php endif;?>
                   <?php endif;?>
                   <a href="javascript:void(0)"><i class="material-icons">business</i></a>

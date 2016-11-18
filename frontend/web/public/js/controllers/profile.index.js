@@ -15,11 +15,15 @@ $('.delete').click(function(e){
 	$('#delete-modal').modal();
 });
 // Это у нас выпадающий список
-function editSimpleGroup(){
+function editSimpleGroup(token){
+	console.log(token);
 	$('#group-activity-modal').modal();
 	$.ajax({
 		url:'/api/get-users-group',
 		dataType:'json',
+		headers:{
+			'X-Key':token,
+		}
 	})
 	.done(function(response) {	
 		renderGroup(response);  
@@ -27,11 +31,15 @@ function editSimpleGroup(){
 }
 
 // Это у нас радио кнопки
-function editGustomGroup(){
+function editGustomGroup(token){
+	console.log(token);
 	$('#group-activity-modal').modal();	
 	$.ajax({
 		url:'/api/get-all-group',
 		dataType:'json',
+		headers:{
+			'X-Key':token,
+		}
 	})
 	.done(function(response) {			
 		renderGroups(response);  

@@ -5,6 +5,7 @@ namespace api\modules\v1\controllers;
 use Yii;
 use common\models\Ticket;
 use common\models\Group;
+use common\models\UserGroup;
 use common\models\CommentTicket;
 use api\components\Controller;
 use yii\data\ActiveDataProvider;
@@ -77,11 +78,6 @@ class TicketController extends Controller
 	    $query->where('{{comment_ticket}}.ticket_id = :ticket_id', [':ticket_id'=> $ticket->id]);
 	    $query->orderBy('{{comment_ticket}}.created_at');
 	  	$comments = $query->all();
-	  	// if($comments){
-	  	// 	foreach ($comments as $comment) {
-	  	// 		$profiles[] = $comment->getProfile();
-	  	// 	}
-	  	// }
 	  	$res = [
 	  		'ticket' => $ticket,
 				'comments' => $comments,
@@ -109,6 +105,64 @@ class TicketController extends Controller
     	return $model->errors;
     }
   	throw new \yii\base\Exception( "Требуется ввод данных посредством POST.",405);
+  }
+
+  public function actionAnalityc(){
+  	$levelUp = Group::find()->where(['level'=>0])->all();
+    foreach ($levelUp as $group) {
+      if(UserGroup::find()->where(['user_id'=>Yii::$app->user->identity->id,'group_id'=>$group->id])->count()){
+        $leveDown = Group::find()->where(['level'=>$group->id])->all();
+        $open  = Ticket::find()->where(['cat_id'=>$group->id,'status'=>1])->count();
+        $wait  = Ticket::find()->where(['cat_id'=>$group->id,'status'=>2])->count();
+        $stop  = Ticket::find()->where(['cat_id'=>$group->id,'status'=>3])->count();
+        $close = Ticket::find()->where(['cat_id'=>$group->id,'status'=>4])->count();
+        $total = Ticket::find()->where(['cat_id'=>$group->id])->count();
+        $statistic[] = [
+          'title' => $group->title,
+          'open'  => $open,
+          'wait'  => $wait,
+          'stop'  => $stop,
+          'close' => $close,
+          'total' => $total,
+        ]; 
+        foreach ($leveDown as $down) {
+          $l_open  = Ticket::find()->where(['cat_id'=>$down->id,'status'=>1])->count();
+          $l_wait  = Ticket::find()->where(['cat_id'=>$down->id,'status'=>2])->count();
+          $l_stop  = Ticket::find()->where(['cat_id'=>$down->id,'status'=>3])->count();
+          $l_close = Ticket::find()->where(['cat_id'=>$down->id,'status'=>4])->count();
+          $l_total = Ticket::find()->where(['cat_id'=>$down->id])->count();
+          $statistic[] = [
+            'title' => $down->title,
+            'open'  => $l_open,
+            'wait'  => $l_wait,
+            'stop'  => $l_stop,
+            'close' => $l_close,
+            'total' => $l_total,
+          ];             
+          $open  += $l_open;
+          $wait  += $l_wait;
+          $stop  += $l_stop;
+          $close += $l_close;
+          $total += $l_total;
+        } 
+        $statistic[] = [
+          'title' => '(Общее) '.$group->title,
+          'open'  => $open,
+          'wait'  => $wait,
+          'stop'  => $stop,
+          'close' => $close,
+          'total' => $total,
+        ]; 
+        unset($open);
+        unset($wait);
+        unset($stop);
+        unset($close);
+        unset($total);
+	    }
+	  }
+	  if(count($statistic))
+	    return $statistic;
+	  throw new \yii\base\Exception( "У вас нет прав для просмотра данной информации.",403);
   }
 }
 ?>

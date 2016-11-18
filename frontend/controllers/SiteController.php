@@ -177,14 +177,7 @@ class SiteController extends Controller
         $group->level = Yii::$app->request->post("level");
         $group->title = Yii::$app->request->post("group");
         if($group->save()){
-          Yii::$app->session->setFlash('success', 'Новая группа создана.');
-          $users = User::find()->where(['role_id'=>4])->all();
-          foreach($users as $user){
-            $userGroup = new UserGroup();
-            $userGroup->user_id = $user->id;
-            $userGroup->group_id = $group->id;
-            $userGroup->save();
-          }
+          Yii::$app->session->setFlash('success', 'Новая группа создана.');          
         }
         else
           Yii::$app->session->setFlash('error', 'Ошибка сохранения.');

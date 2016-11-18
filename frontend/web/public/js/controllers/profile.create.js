@@ -1,9 +1,13 @@
 var group = $('#group');
 $('#role').change(function(data){
+	var token = $('#token').val();
 	if($(this).val() > 2){
 		$.ajax({
 			url:'/api/get-all-group',
 			dataType:'json',
+			headers:{
+				'X-Key':token,
+			}
 		})
 		.done(function(response) {			
 			renderGroups(response);  
@@ -13,6 +17,9 @@ $('#role').change(function(data){
 		$.ajax({
 			url:'/api/get-users-group',
 			dataType:'json',
+			headers:{
+				'X-Key':token,
+			}
 		})
 		.done(function(response) {			
 			console.log(response)

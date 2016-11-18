@@ -28,10 +28,10 @@ class ApiController extends \yii\web\Controller
   public function behaviors()
   {
       $behaviors = parent::behaviors();
-      $behaviors['authenticator'] = [
-          'class' => 'frontend\components\HttpHeaderAuth',
-          'except' => ['index'],
-      ];
+      // $behaviors['authenticator'] = [
+      //     'class' => 'frontend\components\HttpHeaderAuth',
+      //     'except' => ['index'],
+      // ];
       $behaviors['corsFilter'] = [
           'class' => \yii\filters\Cors::className(),
           'cors' => [

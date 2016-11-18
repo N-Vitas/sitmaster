@@ -44,6 +44,22 @@ class Profile extends ActiveRecord
         ];
     }
 
+    public function fields()
+    {
+      return [
+        'user_id',
+        'name',
+        'public_email',
+        'gravatar_id',
+        'location',
+        'phone',
+        'website',
+        'childGroup'=>function($model){
+          return  $model->user->username;
+        }
+      ];
+    }
+
     public function attributeLabels()
     {
         return [

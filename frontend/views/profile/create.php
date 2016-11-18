@@ -9,6 +9,7 @@ use common\models\Role;
 $this->title = Yii::t('app', 'Новый пользователь');
 $this->params['breadcrumbs'][] = ['label' => 'Пользователь', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+$token = \Yii::$app->user->identity->auth_key;
 ?>
 
 <?php echo $this->render('flash') ?>
@@ -29,6 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= $form->field($model, 'location')->textInput(['maxlength' => 255]) ?>
         <?= $form->field($model, 'phone')->textInput(['maxlength' => 255]) ?>
         <?= $form->field($model, 'role_id')->dropDownList(ArrayHelper::map(Role::find()->all(), 'id', 'title'),['id'=>'role'])?>
+        <?= Html::hiddenInput('token', $token,['id'=>'token']);?>
         <div id="group">
         <?php if($model->role_id > 2):?> 
           <?php
