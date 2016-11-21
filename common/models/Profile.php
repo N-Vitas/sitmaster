@@ -48,15 +48,18 @@ class Profile extends ActiveRecord
     {
       return [
         'user_id',
+        'username'=>function($model){
+          return  $model->user->username;
+        },
         'name',
         'public_email',
+        'email'=>function($model){
+          return  $model->user->email;
+        },
         'gravatar_id',
         'location',
         'phone',
         'website',
-        'childGroup'=>function($model){
-          return  $model->user->username;
-        }
       ];
     }
 
