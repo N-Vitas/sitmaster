@@ -52,6 +52,25 @@ class User extends BaseUser
             ];
     }    
 
+    public function fields(){
+        return [
+           'id',
+           'role_id',
+           'cat_id',
+           'cat_level',
+           'username',
+           'email',
+           'auth_key',
+           'profile'=>function($model){
+                return array_merge([
+                    'name' => $model->profile->name,
+                    'phone' => $model->profile->phone,
+                    'location' => $model->profile->location,
+                ]);
+           }
+        ];
+    }
+
     public function attributes()
     {
         return ['id', 'role_id','cat_id','cat_level','username', 'email','password_hash','auth_key','confirmed_at','created_at','updated_at','flags','user_info','registration_ip','password_reset_token'];
