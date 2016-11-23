@@ -87,6 +87,39 @@ class TicketController extends Controller
   	throw new \yii\base\Exception( "Данной заявки не найдено.",404);
   }
 
+  public function actionUpdate($id){
+    // var_dump($_POST,$_FILES);die;
+    $model = Ticket::find()->where('id=:id',[':id'=>$id])->one();
+    if ($model){
+      $model->attributes = Yii::$app->request->post();
+      $model->file = UploadedFile::getInstance($model, 'file');
+
+      if($model->file && $model->save()){
+        $model->file->saveAs('uploads/' . $model->file->baseName . '.' . $model->file->extension);
+        $model->sendEmail(Yii::$app->params['adminEmail']);
+        return $model;
+      }
+      else if($model->save()){
+        $model->sendEmail(Yii::$app->params['adminEmail']);
+        return $model;
+      }
+      return $model->errors;
+    }else{
+      throw new \yii\base\Exception( "Нет такой заявки.",404);
+    }
+    throw new \yii\base\Exception( "Требуется ввод данных посредством POST.",405);
+  }
+
+  public function actionDelete($id){
+    
+    $model = Ticket::find()->where('id=:id',[':id'=>$id])->one();
+    if ($model) {      
+      return $model->delete();
+    }else{
+      return ['result'=>false];
+    }    
+  }
+
   public function actionCreate(){
     // var_dump($_POST,$_FILES);die;
   	$model = new Ticket(['user_id'=>\Yii::$app->user->id]);
