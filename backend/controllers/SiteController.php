@@ -12,6 +12,7 @@ use yii\filters\VerbFilter;
  */
 class SiteController extends Controller
 {
+    public $layout = 'test';
     /**
      * @inheritdoc
      */
@@ -21,8 +22,13 @@ class SiteController extends Controller
             'access' => [
                 'class' => AccessControl::className(),
                 'rules' => [
+                    // [
+                    //     'actions' => ['index'],
+                    //     'allow' => true,
+                    //     'roles' => ['?'],
+                    // ],
                     [
-                        'actions' => ['login', 'error'],
+                        'actions' => ['login', 'error','index'],
                         'allow' => true,
                     ],
                     [
