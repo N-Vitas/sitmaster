@@ -1,0 +1,212 @@
+<html>
+<head>
+<style>
+.XXX {width: 70px;height: 95px;overflow: hidden;padding: 4px;margin-bottom: 20px;line-height: 1.42857143;background-color: #fff;border: 1px solid 
+
+#ddd;border-radius: 4px;-webkit-transition: all .2s ease-in-out;transition: all .2s ease-in-out;}
+.X {font-size:70px;width:100%;text-align:center; height:80px;}/* << вот тут 80!!!*/
+.row{width:300px;height:200px;position:relative;border-radius:5px;margin:150px auto 0 auto;border:1px solid #c9c9c9;box-shadow:0px 1px 5px 
+
+#c9c9c9;background-color: #eee;}
+.btn{color: #fff;background-color: #5cb85c;border-color: #4cae4c;display: inline-block;margin-bottom: 0;font-weight: 400;text-align: 
+
+center;vertical-align: middle;cursor: pointer;background-image: none;border: 1px solid transparent;white-space: nowrap;padding: 6px 12px;font-
+
+size: 14px;line-height: 1.42857143;border-radius: 4px;-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: 
+
+none;display: block;width: 100%;padding-left: 0;padding-right: 0;position: absolute;height: 65px;bottom: 0;
+}
+.btn:active{background-color: #47a447;border-color: #398439;box-shadow: inset 0 3px 5px rgba(0,0,0,.125);}
+.btn:hover{background-color: #47a447;border-color: #398439;}
+.btn:focus{outline-offset: -2px;}
+#xxx1 {position: absolute;top: 10px;left: 10px;}
+#xxx2 {position: absolute;top: 10px;left: 110px;}
+#xxx3 {position: absolute;top: 10px;right: 10px;}
+</style>
+<script type="text/javascript">
+var oneHeight=80, // размер одного элемента
+    numImage=10, // количество элементов
+    speedStep=0.2; // скорость изменения скорости
+function FirstGo(spd=0.2){
+    speedStep=spd;
+    clearInterval(FirstGo.interval);
+    var x=[];
+    for(var i in{xxx1:1}){
+
+        var ob=5+Math.floor(Math.random()*6), // количество оборотов 5 минимум, 10 - максимум
+         nn=Math.random()*numImage;
+            num=Math.floor(nn), // выигравший нумер	    
+            o={
+                ob:ob,num:num,
+            a:document.getElementById(i), // это наш контрол с классом XXX    
+            // время=(speedStart)/speedStep
+            // расстояние=(speedStart/2)*время -арифм прогр
+            // расстояние=speedStart^2/(2*speedStep)
+            // speedStart=sqrt(расстояние*2*speedStep)
+            speed:Math.sqrt(((ob*numImage+num)* oneHeight)* speedStep*2), // скорость
+            scr:-26 // магия, блин 
+        }; // выигравший номер
+        x.push(o);
+    } 
+    FirstGo.interval=setInterval(
+        function (){
+            var i = x.length,complete=true;
+            while(i--){ 
+                var a=x[i];
+                a.scr+=a.speed;
+                if(a.speed>2*speedStep){ 
+                    a.speed-=speedStep;complete=false;
+                } else if(a.speed>0) { 
+                    var t= Math.round(a.scr / oneHeight);
+                    if(t>=numImage) t=0;
+                    //console.log(i,t,a.scr-oneHeight*t,a.ob,a.num);
+                    a.scr=oneHeight*t;
+                    a.speed=0;
+                    complete=false;
+                }
+                if(a.scr>(oneHeight*numImage))
+                    a.scr-=oneHeight*numImage;
+                a.a.scrollTop=Math.floor(a.scr);
+            }
+            if(complete) clearInterval(LetsGo.interval)
+        },20)
+}
+function SecondGo(spd=0.2){
+    speedStep=spd;
+    clearInterval(SecondGo.interval);
+    var x=[];
+    for(var i in{xxx2:1}){
+
+        var ob=5+Math.floor(Math.random()*6), // количество оборотов 5 минимум, 10 - максимум
+         nn=Math.random()*numImage;
+            num=Math.floor(nn), // выигравший нумер	    
+            o={
+                ob:ob,num:num,
+            a:document.getElementById(i), // это наш контрол с классом XXX    
+            // время=(speedStart)/speedStep
+            // расстояние=(speedStart/2)*время -арифм прогр
+            // расстояние=speedStart^2/(2*speedStep)
+            // speedStart=sqrt(расстояние*2*speedStep)
+            speed:Math.sqrt(((ob*numImage+num)* oneHeight)* speedStep*2), // скорость
+            scr:-26 // магия, блин 
+        }; // выигравший номер
+        x.push(o);
+    } 
+    SecondGo.interval=setInterval(
+        function (){
+            var i = x.length,complete=true;
+            while(i--){ 
+                var a=x[i];
+                a.scr+=a.speed;
+                if(a.speed>2*speedStep){ 
+                    a.speed-=speedStep;complete=false;
+                } else if(a.speed>0) { 
+                    var t= Math.round(a.scr / oneHeight);
+                    if(t>=numImage) t=0;
+                    //console.log(i,t,a.scr-oneHeight*t,a.ob,a.num);
+                    a.scr=oneHeight*t;
+                    a.speed=0;
+                    complete=false;
+                }
+                if(a.scr>(oneHeight*numImage))
+                    a.scr-=oneHeight*numImage;
+                a.a.scrollTop=Math.floor(a.scr);
+            }
+            if(complete) clearInterval(LetsGo.interval)
+        },20)
+}
+function LastGo(spd=0.2){
+    speedStep=spd;
+    clearInterval(LastGo.interval);
+    var x=[];
+    for(var i in{xxx3:1}){
+
+        var ob=5+Math.floor(Math.random()*6), // количество оборотов 5 минимум, 10 - максимум
+         nn=Math.random()*numImage;
+            num=Math.floor(nn), // выигравший нумер	    
+            o={
+                ob:ob,num:num,
+            a:document.getElementById(i), // это наш контрол с классом XXX    
+            // время=(speedStart)/speedStep
+            // расстояние=(speedStart/2)*время -арифм прогр
+            // расстояние=speedStart^2/(2*speedStep)
+            // speedStart=sqrt(расстояние*2*speedStep)
+            speed:Math.sqrt(((ob*numImage+num)* oneHeight)* speedStep*2), // скорость
+            scr:-26 // магия, блин 
+        }; // выигравший номер
+        x.push(o);
+    } 
+    LastGo.interval=setInterval(
+        function (){
+            var i = x.length,complete=true;
+            while(i--){ 
+                var a=x[i];
+                a.scr+=a.speed;
+                if(a.speed>2*speedStep){ 
+                    a.speed-=speedStep;complete=false;
+                } else if(a.speed>0) { 
+                    var t= Math.round(a.scr / oneHeight);
+                    if(t>=numImage) t=0;
+                    //console.log(i,t,a.scr-oneHeight*t,a.ob,a.num);
+                    a.scr=oneHeight*t;
+                    a.speed=0;
+                    complete=false;
+                }
+                if(a.scr>(oneHeight*numImage))
+                    a.scr-=oneHeight*numImage;
+                a.a.scrollTop=Math.floor(a.scr);
+            }
+            if(complete) clearInterval(LetsGo.interval)
+        },20)
+}
+function LetsGo(){
+   FirstGo()
+   SecondGo(0.1)
+   LastGo(0.1)
+}
+</script>
+</head>
+<body>
+<div class='row'>
+<div id='xxx1' class='XXX'>
+<div class='X'>1</div> <!-- а вот тут - 10 картинок -->
+<div class='X'>2</div>
+<div class='X'>3</div>
+<div class='X'>4</div>
+<div class='X'>5</div>
+<div class='X'>6</div>
+<div class='X'>7</div>
+<div class='X'>8</div>
+<div class='X'>9</div>
+<div class='X'>10</div>
+<div class='X'>1</div> 
+</div>
+<div id='xxx2' class='XXX'>
+<div class='X'>1</div> <!-- а вот тут - 10 картинок -->
+<div class='X'>2</div>
+<div class='X'>3</div>
+<div class='X'>4</div>
+<div class='X'>5</div>
+<div class='X'>6</div>
+<div class='X'>7</div>
+<div class='X'>8</div>
+<div class='X'>9</div>
+<div class='X'>10</div>
+<div class='X'>1</div> 
+</div>
+<div id='xxx3' class='XXX'>
+<div class='X'>1</div> <!-- а вот тут - 10 картинок -->
+<div class='X'>2</div>
+<div class='X'>3</div>
+<div class='X'>4</div>
+<div class='X'>5</div>
+<div class='X'>6</div>
+<div class='X'>7</div>
+<div class='X'>8</div>
+<div class='X'>9</div>
+<div class='X'>10</div>
+<div class='X'>1</div> 
+</div>
+<button type='button' onclick='LetsGo()' class='btn'>Крутить</button>
+</div>
+</body></html>
